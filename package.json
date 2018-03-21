@@ -1,0 +1,29 @@
+{
+  "name": "epg",
+  "version": "1.0.0",
+  "description": "Javascript plug-in for CTC STB.",
+  "main": "build/Epg.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "plug-in",
+    "epg"
+  ],
+  "author": "Ian Lew",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "amdclean": "^2.7.0",
+    "grunt": "^1.0.2",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-contrib-watch": "^1.0.0"
+  }
+}

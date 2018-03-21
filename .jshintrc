@@ -1,0 +1,19 @@
+{
+    "globals": {
+        "define": false
+    },
+	"boss": false,
+	"curly": true,
+	"eqeqeq": true,
+	"eqnull": true,
+	"expr": true,
+	"immed": false,
+	"newcap": true,
+	"noempty": true,
+	"noarg": true,
+	"undef": true,
+	"regexp": true,
+	"browser": true,
+	"devel": true,
+	"node": true
+}
