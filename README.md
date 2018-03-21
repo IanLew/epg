@@ -1,2 +1,2 @@
 # epg
-It's javascript plug-in for CTC STB.
+Javascript plug-in for CTC STB.
