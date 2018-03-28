@@ -1,17 +1,18 @@
 {
     "globals": {
-        "define": false
+        "define": false,
+        "arguments": false
     },
 	"boss": false,
 	"curly": true,
-	"eqeqeq": true,
+	"eqeqeq": false,
 	"eqnull": true,
 	"expr": true,
 	"immed": false,
-	"newcap": true,
-	"noempty": true,
+	"newcap": false,
+	"noempty": false,
 	"noarg": true,
-	"undef": true,
+	"undef": false,
 	"regexp": true,
 	"browser": true,
 	"devel": true,

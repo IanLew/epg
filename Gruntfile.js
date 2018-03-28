@@ -19,8 +19,8 @@ module.exports = function(grunt) {
                         fs.writeFileSync(outputFile, amdclean.clean({
                             'filePath': outputFile,
                             'wrap': {
-                                'start': this.banner + '\n;(function(root, factory) {\nif (typeof define === "function" && define.amd) {\ndefine(factory);\n} else if (typeof exports === "object") {\nmodule.exports = factory();\n} else {\nroot.epg = factory();\n}\n}(this, function() {\n',
-                                'end': '\nreturn epg;\n}));'
+                                'start': this.banner + '\n(function(win, doc, undefined) {\n',
+                                'end': '\nwin.epg = epg;\n})(window, document);'
                             }
                         }));
                     }
