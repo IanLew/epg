@@ -13,8 +13,17 @@ define(['modules/core', 'modules/cursor', 'modules/swiper'], function(core, curs
 				}
 			};
 
-			var config = core.extend({}, defaults, args);
-
+			var config;
+			if (!(args && args.border && args.shadow)) {
+				var cfg = {};
+				for (var i in defaults.cursor) {
+					if (!/(border|shadow)/ig.test(i)) {
+						cfg[i] = defaults.cursor[i];
+					}
+				}
+				defaults.cursor = cfg;
+			}
+			config = core.extend({}, defaults, args);
 			core.cursor = new cursor(config.cursor);
 
 			core.left = config.controller.left;

@@ -5,7 +5,7 @@ define(function() {
 	var indexOf = arr.indexOf;
 	var toString = class2type.toString;
 	var hasOwn = class2type.hasOwnProperty;
-	
+
 	// epg core.
 	var core = function() {
 		return new core.fn.init();
@@ -176,7 +176,7 @@ define(function() {
 			return arr == null ? -1 : indexOf.call(arr, elem, i);
 		},
 		// The test element is visible.
-		visible: function(ele, dir) {
+		visible: function(ele) {
 			var estyle = win.getComputedStyle(ele, null);
 			if (estyle.visibility === 'hidden' || estyle.display === 'none' || estyle.opacity === '0') {
 				return false;
@@ -189,24 +189,22 @@ define(function() {
 				while (true) {
 					pinfo = pnode.getBoundingClientRect();
 					pstyle = win.getComputedStyle(pnode, null);
+
 					if (pnode.localName === 'body') {
-						if (einfo.top < 0 || einfo.top > win.innerWidth || einfo.left < 0 || einfo.left > win.innerHeight) {
+						if (einfo.top < 0 || einfo.top > win.innerHeight || einfo.left < 0 || einfo.left + einfo.width > win.innerWidth) {
 							return false;
 						} else {
-							break;
+							return true;
 						}
-					} else if (pstyle.overflow === 'hidden') {
-						if (dir === 'top') {
-							if (einfo.top + einfo.height <= pinfo.top || einfo.top > pinfo.top + pinfo.height) {
-								return false;
-							}
-						} else if (dir === 'left') {
-							if (einfo.left + einfo.height <= pinfo.left || einfo.left > pinfo.left + pinfo.height) {
-								return false;
-							}
-						}
-						pnode = pnode.parentNode;
 					}
+
+					if (pstyle.overflow === 'hidden') {
+						if (einfo.top + einfo.height <= pinfo.top || einfo.top > pinfo.top + pinfo.height || einfo.left + einfo.width <= pinfo.left || einfo.left > pinfo.left + pinfo.width) {
+							return false;
+						}
+					}
+
+					pnode = pnode.parentNode;
 				}
 
 				return true;

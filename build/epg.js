@@ -1,4 +1,4 @@
-/*! epg-1.0.0.js create by Ian Lew 2018-03-27 */
+/*! epg-1.0.0.js create by Ian Lew 2018-03-28 */
 (function(win, doc, undefined) {
     var modules_core, modules_cursor, modules_swiper, epg;
     modules_core = function() {
@@ -155,7 +155,7 @@
                 return arr == null ? -1 : indexOf.call(arr, elem, i);
             },
             // The test element is visible.
-            visible: function(ele, dir) {
+            visible: function(ele) {
                 var estyle = win.getComputedStyle(ele, null);
                 if (estyle.visibility === 'hidden' || estyle.display === 'none' || estyle.opacity === '0') {
                     return false;
@@ -167,23 +167,18 @@
                         pinfo = pnode.getBoundingClientRect();
                         pstyle = win.getComputedStyle(pnode, null);
                         if (pnode.localName === 'body') {
-                            if (einfo.top < 0 || einfo.top > win.innerWidth || einfo.left < 0 || einfo.left > win.innerHeight) {
+                            if (einfo.top < 0 || einfo.top > win.innerHeight || einfo.left < 0 || einfo.left + einfo.width > win.innerWidth) {
                                 return false;
                             } else {
-                                break;
+                                return true;
                             }
-                        } else if (pstyle.overflow === 'hidden') {
-                            if (dir === 'top') {
-                                if (einfo.top + einfo.height <= pinfo.top || einfo.top > pinfo.top + pinfo.height) {
-                                    return false;
-                                }
-                            } else if (dir === 'left') {
-                                if (einfo.left + einfo.height <= pinfo.left || einfo.left > pinfo.left + pinfo.height) {
-                                    return false;
-                                }
-                            }
-                            pnode = pnode.parentNode;
                         }
+                        if (pstyle.overflow === 'hidden') {
+                            if (einfo.top + einfo.height <= pinfo.top || einfo.top > pinfo.top + pinfo.height || einfo.left + einfo.width <= pinfo.left || einfo.left > pinfo.left + pinfo.width) {
+                                return false;
+                            }
+                        }
+                        pnode = pnode.parentNode;
                     }
                     return true;
                 }
@@ -284,17 +279,23 @@
                 }
             },
             // Determines whether the target is the parent of the focus.
-            eqParent: function(target) {
-                if (core.type(target) === 'object' && target.nodeType) {
-                    var pnode = this.pointer.parentNode;
+            eq: function(first, second) {
+                if (core.type(first) === 'string') {
+                    first = document.querySelector(first);
+                }
+                if (core.type(second) === 'string') {
+                    second = document.querySelector(second);
+                }
+                if (core.type(first) === 'object' && first.nodeType) {
+                    var pnode = second ? second.parentNode : this.pointer.parentNode;
                     while (true) {
                         if (pnode.localName === 'body') {
-                            if (target.isEqualNode(pnode)) {
+                            if (first.isSameNode(pnode)) {
                                 return true;
                             } else {
                                 return false;
                             }
-                        } else if (target.isEqualNode(pnode)) {
+                        } else if (first.isSameNode(pnode)) {
                             return true;
                         } else {
                             pnode = pnode.parentNode;
@@ -307,20 +308,22 @@
             next: function(dir) {
                 var pointer = this.pointer,
                     pinfo = infos(pointer);
-                var ninfo, dvalue, pref, min;
+                var ninfo, dvalue, pref, min, vis;
                 var sets = doc.querySelectorAll(this.sign);
                 for (var i = 0, len = sets.length; i < len; i++) {
-                    if (!sets[i].isEqualNode(pointer)) {
+                    if (!sets[i].isSameNode(pointer)) {
                         ninfo = infos(sets[i], dir);
-                        if (core.visible(sets[i], dir)) {
-                            var rule = rules(pinfo, ninfo, dvalue, dir);
-                            dvalue = rule.dvalue || dvalue;
-                            rule.pref && (pref = sets[i]);
-                            rule.min && (min = sets[i]);
-                        }
+                        var rule = rules(pinfo, ninfo, dvalue, dir);
+                        dvalue = rule.dvalue || dvalue;
+                        rule.pref && (pref = sets[i]);
+                        rule.min && (min = sets[i]);
                     }
                 }
-                return pref || min;
+                if (dir === 'left' || dir === 'right') {
+                    return pref;
+                } else if (dir === 'up' || dir === 'down') {
+                    return pref || min;
+                }
             },
             // Set the focus style.
             setRim: function() {
@@ -334,8 +337,13 @@
                     var pradius = parseInt(pstyle.borderRadius);
                     var pborder = parseInt(pstyle.borderWidth);
                     var pinfo = this.pointer.getBoundingClientRect();
-                    var bborder = parseInt(this.border.match(/\d+(px)$/gi)[0]);
-                    this.box.style.cssText = 'width:' + pinfo.width + 'px;height:' + pinfo.height + 'px;border:' + this.border + ';border-radius:' + (pradius + bborder) + 'px;position:absolute;top:' + (pinfo.top - bborder) + 'px;left:' + (pinfo.left - bborder) + 'px;z-index: 9999;box-shadow:' + this.shadow + ';-webkit-box-shadow:' + this.shadow + ';-moz-box-shadow:' + this.shadow + ';-ms-box-shadow:' + this.shadow + ';-o-box-shadow:' + this.shadow + ';';
+                    var bstyle = win.getComputedStyle(this.box, null);
+                    var bborder = parseInt(this.border ? this.border.match(/\d+(px)$/gi)[0] : bstyle.borderWidth);
+                    if (this.border && this.shadow) {
+                        this.box.style.cssText = 'width:' + pinfo.width + 'px;height:' + pinfo.height + 'px;border:' + this.border + ';border-radius:' + (pradius + bborder) + 'px;position:absolute;top:' + (pinfo.top - bborder) + 'px;left:' + (pinfo.left - bborder) + 'px;z-index: 9999;box-shadow:' + this.shadow + ';-webkit-box-shadow:' + this.shadow + ';-moz-box-shadow:' + this.shadow + ';-ms-box-shadow:' + this.shadow + ';-o-box-shadow:' + this.shadow + ';';
+                    } else {
+                        this.box.style.cssText = 'width:' + pinfo.width + 'px;height:' + pinfo.height + 'px;border-radius:' + (pradius + bborder) + 'px;position:absolute;top:' + (pinfo.top - bborder) + 'px;left:' + (pinfo.left - bborder) + 'px;z-index: 9999;';
+                    }
                     if (core.type(this.effect) === 'number') {
                         if (this.effect > 1 && this.effect < 5) {
                             var bwidth = (pinfo.width - pborder * 2) * this.effect + pborder * 2,
@@ -345,7 +353,7 @@
                         } else if (this.effect > 500 && this.effect < 2000) {
                             var _this = this;
                             this.twinkleTimer = setInterval(function() {
-                                var bstyle = win.getComputedStyle(_this.box, null);
+                                bstyle = win.getComputedStyle(_this.box, null);
                                 if (bstyle.visibility === 'visible') {
                                     _this.box.style.visibility = 'hidden';
                                 } else {
@@ -438,13 +446,15 @@
                 prevButton: '.swiper-button-prev',
                 nextButton: '.swiper-button-next',
                 direction: 'horizontal',
-                autoPlay: 3000
+                autoPlay: 3000,
+                distance: 0
             };
             var config = core.extend({}, defaults, options);
             this.container = doc.querySelector(config.container);
             this.wrapper = this.container.querySelector(config.wrapper);
             this.prevButton = this.container.querySelector(config.prevButton);
             this.nextButton = this.container.querySelector(config.nextButton);
+            this.config = {};
             if (config.type === 'none') {
                 if (this.items[0].offsetWidth == this.container.offsetWidth) {
                     config.type = 'slide';
@@ -454,21 +464,23 @@
             }
             if (config.type === 'list') {
                 for (var j in config) {
-                    if (!/autoPlay|speed|loop|pagination/gi.test(j)) {
+                    if (!/(autoPlay|speed|loop|pagination)/gi.test(j)) {
                         this.config[j] = config[j];
                     }
                 }
                 if (this.config.direction === 'horizontal') {
                     this.pageNum = Math.ceil(this.wrapper.offsetWidth / this.container.offsetWidth);
                     this.scrollWidth = (this.pageNum - 1) * this.container.offsetWidth;
+                    this.distance = config.distance ? config.distance : this.container.offsetWidth;
                 } else if (this.config.direction === 'vertical') {
                     this.pageNum = Math.ceil(this.wrapper.offsetHeight / this.container.offsetHeight);
                     this.scrollWidth = (this.pageNum - 1) * this.container.offsetHeight;
+                    this.distance = config.distance ? config.distance : this.container.offsetHeight;
                 }
                 this.currentPage = 1;
             } else if (config.type === 'slide') {
                 for (var k in config) {
-                    if (!/scrollbar/gi.test(k)) {
+                    if (!/(scrollbar|distance)/gi.test(k)) {
                         this.config[k] = config[k];
                     }
                 }
@@ -516,18 +528,18 @@
                 this.move('down');
             },
             move: function(dir) {
-                if (this.type === 'slide') {
+                if (this.config.type === 'slide') {
                     this.items[this.currentIdx].style.zIndex = 1;
                     this.allPagination[this.currentIdx].classList.remove(this.config.pagination.active);
-                    if (this.direction === 'horizontal') {
+                    if (this.config.direction === 'horizontal') {
                         if (dir === 'left') {
-                            this.currentIdx = (this.currentIdx + 1) % this.itemNums;
-                        } else if (dir === 'right') {
                             if (this.currentIdx > 0) {
                                 --this.currentIdx;
                             } else {
                                 this.currentIdx = this.itemNums - 1;
                             }
+                        } else if (dir === 'right') {
+                            this.currentIdx = (this.currentIdx + 1) % this.itemNums;
                         }
                     } else if (this.config.direction === 'vertical') {
                         if (dir === 'up') {
@@ -542,28 +554,28 @@
                     }
                     this.items[this.currentIdx].style.zIndex = 10;
                     this.allPagination[this.currentIdx].classList.add(this.config.pagination.active);
-                } else if (this.type === 'list') {
-                    if (this.direction === 'horizontal') {
+                } else if (this.config.type === 'list') {
+                    if (this.config.direction === 'horizontal') {
                         if (dir === 'left') {
-                            if (this.currentPage < this.pageNum) {
-                                this.wrapper.style.left = this.wrapper.offsetLeft - this.container.offsetWidth;
-                                ++this.currentPage;
+                            if (this.currentPage > 1) {
+                                this.wrapper.style.left = this.wrapper.offsetLeft + this.distance + 'px';
+                                --this.currentPage;
                             }
                         } else if (dir === 'right') {
-                            if (this.currentPage > 1) {
-                                this.wrapper.style.left = this.wrapper.offsetLeft + this.container.offsetWidth;
-                                --this.currentPage;
+                            if (this.currentPage < this.pageNum) {
+                                this.wrapper.style.left = this.wrapper.offsetLeft - this.distance + 'px';
+                                ++this.currentPage;
                             }
                         }
                     } else if (this.config.direction === 'vertical') {
                         if (dir === 'up') {
                             if (this.currentPage < this.pageNum) {
-                                this.wrapper.style.top = this.wrapper.offsetTop - this.container.offsetHeight;
+                                this.wrapper.style.top = this.wrapper.offsetTop - this.distance + 'px';
                                 ++this.currentPage;
                             }
                         } else if (dir === 'down') {
                             if (this.currentPage > 1) {
-                                this.wrapper.style.top = this.wrapper.offsetTop + this.container.offsetHeight;
+                                this.wrapper.style.top = this.wrapper.offsetTop + this.distance + 'px';
                                 --this.currentPage;
                             }
                         }
@@ -635,7 +647,17 @@
                         effect: null
                     }
                 };
-                var config = core.extend({}, defaults, args);
+                var config;
+                if (!(args && args.border && args.shadow)) {
+                    var cfg = {};
+                    for (var i in defaults.cursor) {
+                        if (!/(border|shadow)/gi.test(i)) {
+                            cfg[i] = defaults.cursor[i];
+                        }
+                    }
+                    defaults.cursor = cfg;
+                }
+                config = core.extend({}, defaults, args);
                 core.cursor = new cursor(config.cursor);
                 core.left = config.controller.left;
                 core.right = config.controller.right;

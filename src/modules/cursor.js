@@ -68,18 +68,25 @@ define(['modules/core'], function(core) {
 			}
 		},
 		// Determines whether the target is the parent of the focus.
-		eqParent: function(target) {
-			if (core.type(target) === 'object' && target.nodeType) {
-				var pnode = this.pointer.parentNode;
+		eq: function(first, second) {
+			if (core.type(first) === 'string') {
+				first = document.querySelector(first);
+			}
+			if (core.type(second) === 'string') {
+				second = document.querySelector(second);
+			}
+
+			if (core.type(first) === 'object' && first.nodeType) {
+				var pnode = second ? second.parentNode : this.pointer.parentNode;
 
 				while (true) {
 					if (pnode.localName === 'body') {
-						if (target.isEqualNode(pnode)) {
+						if (first.isSameNode(pnode)) {
 							return true;
 						} else {
 							return false;
 						}
-					} else if (target.isEqualNode(pnode)) {
+					} else if (first.isSameNode(pnode)) {
 						return true;
 					} else {
 						pnode = pnode.parentNode;
@@ -96,24 +103,27 @@ define(['modules/core'], function(core) {
 			var ninfo,
 				dvalue,
 				pref,
-				min;
+				min,
+				vis;
 			var sets = doc.querySelectorAll(this.sign);
 
 			for (var i = 0, len = sets.length; i < len; i++) {
-				if (!sets[i].isEqualNode(pointer)) {
+				if (!sets[i].isSameNode(pointer)) {
 					ninfo = infos(sets[i], dir);
 
-					if (core.visible(sets[i], dir)) {
-						var rule = rules(pinfo, ninfo, dvalue, dir);
+					var rule = rules(pinfo, ninfo, dvalue, dir);
 
-						dvalue = rule.dvalue || dvalue;
-						rule.pref && (pref = sets[i]);
-						rule.min && (min = sets[i]);
-					}
+					dvalue = rule.dvalue || dvalue;
+					rule.pref && (pref = sets[i]);
+					rule.min && (min = sets[i]);
 				}
 			}
 
-			return pref || min;
+			if (dir === 'left' || dir === 'right') {
+				return pref;
+			} else if (dir === 'up' || dir === 'down') {
+				return pref || min;
+			}
 		},
 		// Set the focus style.
 		setRim: function() {
@@ -128,9 +138,14 @@ define(['modules/core'], function(core) {
 				var pradius = parseInt(pstyle.borderRadius);
 				var pborder = parseInt(pstyle.borderWidth);
 				var pinfo = this.pointer.getBoundingClientRect();
-				var bborder = parseInt(this.border.match(/\d+(px)$/ig)[0]);
+				var bstyle = win.getComputedStyle(this.box, null);
+				var bborder = parseInt(this.border ? this.border.match(/\d+(px)$/ig)[0] : bstyle.borderWidth);
 
-				this.box.style.cssText = 'width:' + pinfo.width + 'px;height:' + pinfo.height + 'px;border:' + this.border + ';border-radius:' + (pradius + bborder) + 'px;position:absolute;top:' + (pinfo.top - bborder) + 'px;left:' + (pinfo.left - bborder) + 'px;z-index: 9999;box-shadow:' + this.shadow + ';-webkit-box-shadow:' + this.shadow + ';-moz-box-shadow:' + this.shadow + ';-ms-box-shadow:' + this.shadow + ';-o-box-shadow:' + this.shadow + ';';
+				if (this.border && this.shadow) {
+					this.box.style.cssText = 'width:' + pinfo.width + 'px;height:' + pinfo.height + 'px;border:' + this.border + ';border-radius:' + (pradius + bborder) + 'px;position:absolute;top:' + (pinfo.top - bborder) + 'px;left:' + (pinfo.left - bborder) + 'px;z-index: 9999;box-shadow:' + this.shadow + ';-webkit-box-shadow:' + this.shadow + ';-moz-box-shadow:' + this.shadow + ';-ms-box-shadow:' + this.shadow + ';-o-box-shadow:' + this.shadow + ';';
+				} else {
+					this.box.style.cssText = 'width:' + pinfo.width + 'px;height:' + pinfo.height + 'px;border-radius:' + (pradius + bborder) + 'px;position:absolute;top:' + (pinfo.top - bborder) + 'px;left:' + (pinfo.left - bborder) + 'px;z-index: 9999;';
+				}
 
 				if (core.type(this.effect) === 'number') {
 					if (this.effect > 1 && this.effect < 5) {
@@ -143,7 +158,7 @@ define(['modules/core'], function(core) {
 						var _this = this;
 
 						this.twinkleTimer = setInterval(function() {
-							var bstyle = win.getComputedStyle(_this.box, null);
+							bstyle = win.getComputedStyle(_this.box, null);
 
 							if (bstyle.visibility === 'visible') {
 								_this.box.style.visibility = 'hidden';
