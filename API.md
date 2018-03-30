@@ -1,6 +1,6 @@
 # Epg API
 Because javascript is an open language, many of the methods in the program can be accessed. And I didn't privatize them, so, if you know what they do and can use them, congratulations. However, I am not prepared to introduce it here. I will only elaborate on what I think is important. Now, let's go.<br>
-When you use epg, first identify the focus tag on the page and then initialize the epg.
+When you use `epg`, first identify the focus tag on the page and then initialize the `epg`.
 ```javascript
 epg.init({
 	// config code.
@@ -24,10 +24,10 @@ var defaults = {
 };
 ```
 Configuration item interpretation:<br>
-`controller`: Remote control object, you can write the operation callback function inside.<br>
+`controller`: remote control object, you can write the operation callback function inside.<br>
 These are the callback functions: `left`, `right`, `up`, `down`, `enter` and `back`. `left`/`right`/`up`/`down` are the focus movement direction function. If you don't need any action while the focus is moving, you can't configure it. Instead, the built-in operation function, which is the internal operation function of the `cursor` object. Even if there is any change that must be reset, you will lose the default operation and you will be solely responsible for all operations. For example, the data is loaded synchronous or the focus jumps to the specified location. That is, if the initialization is done externally, the callback must be used for the corresponding purpose. <br>
 `enter` and `back` are link jump and page return function. If there is no operation, you can do without configuration.<br>
-`cursor`: Focus object's configuration object, relationship to focus execution.<br>
+`cursor`: focus object's configuration object, relationship to focus execution.<br>
 `sign`, a class name which is the tag of the focus, if you do not set the focus mark must be the default.<br>
 `first`, the first focus which you want to set, if not specified, the default value will be executed. Because the first focus needs to be found, it must be initialized in the presence of the focus, otherwise it may not be expected.<br>
 `rim`, a focus class name, the box style, the external style.<br>
@@ -47,15 +47,15 @@ Other major functions:
 ```javascript
 epg.cursor.parent(first, second);  // return the target parent element exists.
 ```
-`first` is the parent Element, must. `second` is find the child element of the parent element, optional. If `second` is not exists, the default value is the current focus. These two parameters are allowed to be `string` and `only DOM object`.
+`first` is the parent element, must. `second` is find the child element of the parent element, optional. If `second` is not exists, the default value is the current focus. These two parameters are allowed to be `string` or `only DOM object`.
 ```javascript
 epg.cursor.index(parent, target);  // return the target element is indexed by the parent element.
 ```
-`parent` is the parent Element, must. `target` is child element under the parent element, optional. If `target` is not exists, the default value is the current focus. These two parameters are allowed to be `string` and `only DOM object`.
+`parent` is the parent element, must. `target` is child element under the parent element, optional. If `target` is not exists, the default value is the current focus. These two parameters are allowed to be `string` or `only DOM object`.
 ```javascript
 epg.cursor.next(dir);  // return next focus.
 ```
-`dir`, Specifies the direction of the next focus.<br>
+`dir`, specifies the direction of the next focus.<br>
 Functions that can still be called externally:
 ```javascript
 // Internal call:

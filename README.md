@@ -15,14 +15,14 @@ epg.init({
 	// config code.
 });
 ```
-Next, set a place where the style tag needs focus, and the location of the default link style tag is the focus. What?<br>
-Set the tag for focus? Are you kidding me? A lot of people will ask why? The set-top box browser already has a focus style, why not use it? Seriously, I'm not crazy, it's telecom mad. Each type of set-top box focus style is inconsistent, and you can't change the way it looks. There is no document telling us how to change the appearance of it, the `CTC` can not give the document, or the internal reference does not pass. <br>
+Next, set a place where the style tag needs focus, and the location of the default link style tag is the focus. <br>
+What? Set the tag for focus? Are you kidding me? A lot of people will ask why? The set-top box browser already has a focus style, why not use it? Seriously, I'm not crazy, it's telecom mad. Each type of set-top box focus style is inconsistent, and you can't change the way it looks. There is no document telling us how to change the appearance of it, the `CTC` can not give the document, or the internal reference does not pass. <br>
 So we can only solve this problem by ourselves, and this is the answer.
 
 >Remember it, if telecom's boss is not your friend, please don't try to use `a` tag as focus.
 
 Then the question comes again, without `a` tag, how to configure the link, how to achieve the jump? You can use a custom attribute to put a link into the focus tag, such as `data-*`, when needed. With links, things get easier, `document.location.herf` can instead `a` tag.<br>
-If you want to use some special effects, the plug-in provides a tool called swiper, which has two modes of expression: slide effects and list movement effects.
+If you want to use some special effects, the plug-in provides a tool called `swiper`, which has two modes of expression: slide effects and list movement effects.
 ```javascript
 new epg.swiper({
 	// config code.
