@@ -28,7 +28,7 @@ new epg.swiper({
 	// config code.
 });
 ```
-The configuration item reference API file `API.md`.
+The configuration item reference API file [API.md](https://github.com/IanLew/epg/blob/master/API.md).
 
 >It is worth remembering that it must be used after the document is loaded. You can use it in function `window.onload`, or you can write it in the end. If you use synchronous loading, the initialization should be in the synchronous completion function.
 
