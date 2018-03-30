@@ -7,24 +7,25 @@ define(['modules/core', 'modules/cursor', 'modules/swiper'], function(core, curs
 					sign: '.link',
 					first: doc.querySelector('.link'),
 					rim: '.pseudo',
+					mode: 'outer',
 					border: '#ffde00 solid 2px',
 					shadow: '0 0 8px 1px #000',
 					effect: null
 				}
 			};
 
-			var config;
-			if (!(args && args.border && args.shadow)) {
+			var config = core.extend(true, defaults, args);
+			if (!args || args.mode === 'inline') {
+				core.cursor = new cursor(config.cursor);
+			} else {
 				var cfg = {};
-				for (var i in defaults.cursor) {
-					if (!/(border|shadow)/ig.test(i)) {
-						cfg[i] = defaults.cursor[i];
+				for (var i in config.cursor) {
+					if (!/border|shadow/ig.test(i)) {
+						cfg[i] = config.cursor[i];
 					}
 				}
-				defaults.cursor = cfg;
+				core.cursor = new cursor(cfg);
 			}
-			config = core.extend({}, defaults, args);
-			core.cursor = new cursor(config.cursor);
 
 			core.left = config.controller.left;
 			core.right = config.controller.right;
@@ -32,6 +33,8 @@ define(['modules/core', 'modules/cursor', 'modules/swiper'], function(core, curs
 			core.down = config.controller.down;
 			core.enter = config.controller.enter;
 			core.back = config.controller.back;
+
+			core.state = 'initialization';
 		},
 		swiper: swiper
 	});
@@ -64,10 +67,10 @@ define(['modules/core', 'modules/cursor', 'modules/swiper'], function(core, curs
 		if (keycode === 0x0300) {
 			if (typeof Utility !== 'undefined') {
 				var oEvent = Utility.getEvent();
-				eventHandler(oEvent.type, true);
+				core.state && eventHandler(oEvent.type, true);
 			}
 		} else {
-			eventHandler(keycode);
+			core.state && eventHandler(keycode);
 		}
 	}
 

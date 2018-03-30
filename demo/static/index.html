@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Index</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+<script type="text/javascript">
+window.onload = function() {
+	var swiper;
+	epg.init({
+		controller: {
+			right: function() {
+				var next = epg.cursor.next('right');
+				if(epg.cursor.parent('.cnt .right', next)) {
+					swiper.right();
+					epg.cursor.right(next);
+				} else {
+					epg.cursor.right();
+				}
+			},
+			left: function() {
+				var next = epg.cursor.next('left');
+				if(epg.cursor.parent('.cnt .left', next)) {
+					swiper.left();
+					epg.cursor.left(next);
+				} else {
+					epg.cursor.left();
+				}
+			}
+		},
+		cursor: {
+			first: document.querySelector('.video')
+		}
+	});
+	swiper = new epg.swiper({
+		mode: 'list',
+		container: '.cnt',
+		wrapper: '.box',
+		distance: 1140
+	});
+};
+</script>
+</head>
+<body bgcolor="transparent" background="images/bg.jpg">
+<div class="main">
+	<div class="top">
+		<div class="left">
+			<div class="search link"><img src="images/ind_search_ico.png" alt=""></div>
+			<div class="notice link"><img src="images/ind_notice_ico.png" alt=""></div>
+			<div class="msg"><marquee>This is a marquee.</marquee></div>
+		</div>
+		<div class="right">
+			<div class="logo"><img src="images/logo.png" alt=""></div>
+			<div class="time">15:00</div>
+		</div>
+	</div>
+	<div class="cnt">
+		<div class="box">
+			<div class="left">
+				<div class="vbox">
+					<!-- video -->
+					<div class="video link">
+						<img src="images/ind_video.jpg" alt="">
+						<span><img src="images/play_ico.png" alt=""></span>
+					</div>
+					<!-- ads -->
+					<div class="ads">
+						<div class="ad link"><img src="images/ind_img_01.jpg" alt=""></div>
+						<div class="ad link"><img src="images/ind_img_01.jpg" alt=""></div>
+					</div>
+				</div>
+				<!-- list -->
+				<div class="ibox">
+					<div class="item link">
+						<img src="images/ind_img_02.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/ind_img_02.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/ind_img_02.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/ind_img_02.jpg" alt="">
+						<span>test</span>
+					</div>
+				</div>
+				<!-- category -->
+				<div class="category">
+					<div class="cate cate1 link">category 1</div>
+					<div class="cate cate2 link">category 2</div>
+					<div class="cate cate3 link">category 3</div>
+					<div class="cate cate4 link">category 4</div>
+				</div>
+			</div>
+			<div class="right">
+				<div class="big">
+					<div class="link"><img src="images/ind_img_03.jpg" alt=""></div>
+					<div class="link"><img src="images/ind_img_03.jpg" alt=""></div>
+				</div>
+				<div class="small">
+					<div class="link"><img src="images/ind_img_04.jpg" alt=""></div>
+					<div class="link"><img src="images/ind_img_04.jpg" alt=""></div>
+					<div class="link"><img src="images/ind_img_04.jpg" alt=""></div>
+					<div class="link"><img src="images/ind_img_04.jpg" alt=""></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

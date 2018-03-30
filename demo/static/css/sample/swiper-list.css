@@ -1,0 +1,100 @@
+.title {
+	color: #444;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 20px;
+}
+.horizontal {
+	width: 888px;
+	margin: 15px auto;
+	position: relative;
+}
+.horizontal .swiper-button-prev, .horizontal .swiper-button-next {
+	width: 14px;
+	height: 24px;
+	position: absolute;
+	top: 50%;
+	margin-top: -12px;
+}
+.horizontal .swiper-button-prev {
+	left: -20px;
+}
+.horizontal .swiper-button-next {
+	right: -20px;
+}
+.horizontal .swiper-container-horizontal {
+	width: 100%;
+	height: 82px;
+	overflow: hidden;
+	position: relative;
+}
+.horizontal .swiper-wrapper {
+	height: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 0;
+	white-space: nowrap;
+}
+.horizontal .swiper-slide {
+	text-align: center;
+	font-size: 25px;
+	line-height: 80px;
+	width: 200px;
+	height: 80px;
+	margin: 0 10px;
+	display: inline-block;
+	border: red solid 1px;
+}
+.vertical {
+	width: 200px;
+	height: 408px;
+	margin: 20px auto;
+	position: relative;
+}
+.vertical .swiper-button-prev, .vertical .swiper-button-next {
+	width: 23px;
+	height: 14px;
+	position: absolute;
+	left: 50%;
+	margin-left: -12px;
+	text-align: center;
+}
+.vertical .swiper-button-prev {
+	top: -15px;
+}
+.vertical .swiper-button-next {
+	bottom: -15px;
+}
+.vertical .swiper-container-vertical {
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}
+.vertical .swiper-wrapper {
+	width: 100%;
+	height: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.vertical .swiper-slide {
+	width: 198px;
+	height: 80px;
+	margin: 10px 0;
+	position: relative;
+	display: inline-block;
+	border: red solid 1px;
+	text-align: center;
+	font-size: 25px;
+	line-height: 80px;
+}
+.switcher {
+	text-align: center;
+	font-size: 16px;
+	padding: 20px 0;
+}
+.switcher input[type="radio"] {
+	margin-right: 10px;
+}

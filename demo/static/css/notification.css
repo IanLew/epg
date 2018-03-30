@@ -1,0 +1,74 @@
+
+.date-time {
+	overflow: hidden;
+	position: absolute;
+	top: 35px;
+	right: 35px;
+}
+.date-time .time {
+	color: #fff;
+	font-size: 32px;
+	line-height: 40px;
+	float: left;
+}
+.date-time .dbox {
+	margin-left: 15px;
+	float: left;
+}
+.date-time .week,
+.date-time .date {
+	color: #fff;
+	font-size: 18px;
+	line-height: 20px;
+}
+
+.list {
+	width: 1035px;
+	position: absolute;
+	top: 130px;
+	left: 50%;
+	margin-left: -527px;
+}
+.list .up, .list .down {
+	width: 40px;
+	height: 23px;
+	position: absolute;
+	left: 50%;
+	margin-left: -20px;
+}
+.list .up {
+	top: -30px;
+}
+.list .down {
+	bottom: -30px;
+}
+.list .items {
+	height: 495px;
+	overflow: hidden;
+	position: relative;
+}
+.list .items .box {
+	width: 100%;
+	height: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.list .item {
+	width: 935px;
+	height: 65px;
+	margin: 15px 0;
+	position: relative;
+	line-height: 65px;
+	color: #fff;
+	font-size: 26px;
+	background: rgba(255, 255, 255, .2) url(../images/nt_ico.png) no-repeat 25px center;
+	padding: 0 25px 0 75px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.detail img {
+	width: 100%;
+	height: 100%;
+}

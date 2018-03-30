@@ -178,30 +178,21 @@ define(function() {
 		// The test element is visible.
 		visible: function(ele) {
 			var estyle = win.getComputedStyle(ele, null);
+
 			if (estyle.visibility === 'hidden' || estyle.display === 'none' || estyle.opacity === '0') {
 				return false;
 			} else {
 				var pnode = ele.parentNode,
-					einfo = ele.getBoundingClientRect(),
-					pinfo,
 					pstyle;
 
 				while (true) {
-					pinfo = pnode.getBoundingClientRect();
 					pstyle = win.getComputedStyle(pnode, null);
 
-					if (pnode.localName === 'body') {
-						if (einfo.top < 0 || einfo.top > win.innerHeight || einfo.left < 0 || einfo.left + einfo.width > win.innerWidth) {
-							return false;
-						} else {
-							return true;
-						}
+					if (pstyle.visibility === 'hidden' || pstyle.display === 'none' || pstyle.opacity === '0') {
+						return false;
 					}
-
-					if (pstyle.overflow === 'hidden') {
-						if (einfo.top + einfo.height <= pinfo.top || einfo.top > pinfo.top + pinfo.height || einfo.left + einfo.width <= pinfo.left || einfo.left > pinfo.left + pinfo.width) {
-							return false;
-						}
+					if (pnode.localName === 'body') {
+						return true
 					}
 
 					pnode = pnode.parentNode;
@@ -212,7 +203,7 @@ define(function() {
 		},
 		// There is an intersection.
 		contains: function(cmin, cmax, nmin, nmax) {
-			return (cmax - cmin) + (nmax - nmin) > Math.max(cmin, cmax, cmin, cmax) - Math.min(cmin, cmax, nmin, nmax);
+			return Math.max(cmin, nmin) <= Math.min(cmax, nmax);;
 		},
 		// Calculate the distance between two points.
 		distance: function(cx, cy, nx, ny) {

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>通知</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/notification.css" />
+<script type="text/javascript">
+window.onload = function() {
+	var swiper;
+	epg.init({
+		controller: {
+			up: function() {
+				var next = epg.cursor.next('up');
+				var idx = epg.cursor.index('.list');
+				if(idx % 6 === 0) {
+					swiper.up();
+					epg.cursor.up(next);
+				} else {
+					epg.cursor.up();
+				}
+			},
+			down: function() {
+				var next = epg.cursor.next('down');
+				var idx = epg.cursor.index('.list');
+				if(idx % 6 === 5) {
+					swiper.down();
+					epg.cursor.down(next);
+				} else {
+					epg.cursor.down();
+				}
+			}
+		}
+	});
+	swiper = new epg.swiper({
+		mode: 'list',
+		container: '.list',
+		wrapper: '.box',
+		prevButton: '.up',
+		nextButton: '.down',
+		direction:'vertical',
+		distance: 480
+	});
+};
+</script>
+</head>
+<body bgcolor="transparent" background="images/bg.jpg">
+<div class="main">
+	<div class="date-time">
+		<div class="time">12:22</div>
+		<div class="dbox">
+			<div class="week">Monday</div>
+			<div class="date">2018/2/5</div>
+		</div>
+	</div>
+	<div class="list">
+		<div class="up"><img src="images/nt_up.png" alt=""></div>
+		<div class="items">
+			<div class="box">
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+				<div class="item link">This is a piece of information.</div>
+			</div>
+		</div>
+		<div class="down"><img src="images/nt_down.png" alt=""></div>
+	</div>
+</div>
+</body>
+</html>

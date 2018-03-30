@@ -1,0 +1,216 @@
+
+.top {
+	margin: 0 25px;
+	overflow: hidden;
+}
+.top .left {
+	margin-top: 25px;
+	float: left;
+	overflow: hidden;
+}
+.top .left .search,
+.top .left .notice,
+.top .left .msg {
+	float: left;
+}
+.top .left .search,
+.top .left .notice {
+	margin-right: 15px;
+	position: relative;
+	top: 7px;
+}
+.top .left .msg {
+	width: 515px;
+	height: 40px;
+	padding: 0 10px;
+	background-color: rgba(255, 255, 255, .2);
+	color: #fff;
+	font-size: 24px;
+	line-height: 40px;
+}
+.top .right {
+	margin-top: 10px;
+	float: right;
+	overflow: hidden;
+}
+.top .right .time {
+	float: right;
+	color: #fff;
+	font-size: 24px;
+	line-height: 25px;
+	position: relative;
+	top: 25px;
+	margin-right: 15px;
+}
+.top .right .logo {
+	height: 51px;
+	float: right;
+}
+.top .right .logo img {
+	width: auto;
+	height: 51px;
+}
+
+.cnt {
+	height: 610px;
+	margin-top: 25px;
+	overflow: hidden;
+	position: relative;
+}
+.cnt .box {
+	width: auto;
+	height: inherit;
+	font-size: 0;
+	white-space: nowrap;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.cnt .left {
+	width: 1115px;
+	height: 100%;
+	display: inline-block;
+	margin-left: 25px;
+	position: relative;
+}
+.cnt .left .vbox {
+	height: 365px;
+	overflow: hidden;
+}
+.cnt .left .video {
+	width: 649px;
+	height: 365px;
+	float: left;
+	position: relative;
+}
+.cnt .left .video img {
+	width: 649px;
+	height: 365px;
+}
+.cnt .left .video span {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .4);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+.cnt .left .video span img {
+	width: 75px;
+	height: 75px;
+	position: absolute;
+	top: 50%;
+	margin-top: -37px;
+	left: 50%;
+	margin-left: -37px;
+	z-index: 2;
+}
+.cnt .left .ads {
+	float: right;
+}
+.cnt .left .ads .ad {
+	width: 446px;
+	height: 172px;
+	margin-bottom: 20px;
+}
+.cnt .left .ads .ad img {
+	width: 446px;
+	height: 172px;
+}
+.cnt .left .ibox {
+	height: 150px;
+	overflow: hidden;
+	margin-top: 18px;
+	font-size: 0;
+	white-space: nowrap;
+}
+.cnt .left .ibox .item {
+	width: 264px;
+	height: 150px;
+	display: inline-block;
+	position: relative;
+	margin-right: 19px;
+}
+.cnt .left .ibox .item img {
+	width: 264px;
+	height: 150px;
+}
+.cnt .left .ibox .item span {
+	width: 100%;
+	height: 35px;
+	background-color: rgba(0, 0, 0, .4);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 2;
+	color: #fff;
+	font-size: 16px;
+	text-align: center;
+	line-height: 35px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.cnt .left .category {
+	overflow: hidden;
+	font-size: 0;
+	white-space: nowrap;
+	margin-top: 20px;
+}
+.cnt .left .cate {
+	color: #fff;
+	font-size: 22px;
+	text-align: center;
+	line-height: 57px;
+	width: 251px;
+	height: 57px;
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-right: 37px;
+}
+.cnt .left .cate1 {
+	background: url(../images/ind_cate_01.jpg) no-repeat;
+}
+.cnt .left .cate2 {
+	background: url(../images/ind_cate_02.jpg) no-repeat;
+}
+.cnt .left .cate3 {
+	background: url(../images/ind_cate_03.jpg) no-repeat;
+}
+.cnt .left .cate4 {
+	background: url(../images/ind_cate_04.jpg) no-repeat;
+}
+
+.cnt .right {
+	width: 1248px;
+	height: 100%;
+	display: inline-block;
+	margin-left: 15px;
+	overflow: hidden;
+}
+.cnt .right .big {
+	height: 328px;
+}
+.cnt .right .big div {
+	width: 604px;
+	height: 328px;
+	margin: 0 10px 21px 10px;
+	float: left;
+}
+.cnt .right .big div img {
+	width: 604px;
+	height: 328px;
+}
+.cnt .right .small div {
+	width: 604px;
+	height: 120px;
+	margin: 0 10px 21px 10px;
+	float: left;
+}
+.cnt .right .small div img {
+	width: 604px;
+	height: 120px;
+}

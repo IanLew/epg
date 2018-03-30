@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Swiper-list Test</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="../static/css/sample/swiper-list.css" />
+<script type="text/javascript">
+var checked;
+function change() {
+	var switcher = document.getElementsByName('switcher');
+	for(var i = 0, len = switcher.length; i < len; i++) {
+		if(switcher[i].checked) {
+			checked = switcher[i].value;
+			break;
+		}
+	}
+}
+window.onload = function() {
+	var hSwiper, vSwiper, hlast, vlast;
+	epg.init({
+		controller: {
+			right: function() {
+				if(epg.cursor.parent('.swiper-container-horizontal')) {
+					var next = epg.cursor.next('right');
+					var idx = epg.cursor.index('.horizontal');
+					if(idx % 4 === 3) {
+						hSwiper.right();
+						epg.cursor.right(next);
+					} else {
+						epg.cursor.right();
+					}
+				}
+			},
+			left: function() {
+				if(epg.cursor.parent('.swiper-container-horizontal')) {
+					var next = epg.cursor.next('left');
+					var idx = epg.cursor.index('.horizontal');
+					if(idx % 4 === 0) {
+						hSwiper.left();
+						epg.cursor.left(next);
+					} else {
+						epg.cursor.left();
+					}
+				}
+			},
+			up: function() {
+				if(epg.cursor.parent('.swiper-container-vertical')) {
+					var next = epg.cursor.next('up');
+					var idx = epg.cursor.index('.vertical');
+					if(checked === 'horizontal') {
+						vlast = epg.cursor.pointer;
+						hlast ? epg.cursor.up(hlast) : epg.cursor.up(document.querySelectorAll('.horizontal .link')[0]);
+					} else {
+						if(idx % 4 === 0) {
+							vSwiper.up();
+							epg.cursor.parent('.vertical', next) && epg.cursor.up(next);
+						} else {
+							epg.cursor.parent('.vertical', next) && epg.cursor.up();
+						}
+					}
+				}
+			},
+			down: function() {
+				if(epg.cursor.parent('.swiper-container-vertical')) {
+					var next = epg.cursor.next('down');
+					var idx = epg.cursor.index('.vertical');
+					if(idx % 4 === 3) {
+						vSwiper.down();
+						epg.cursor.down(next);
+					} else {
+						epg.cursor.down();
+					}
+				} else if(checked === 'vertical') {
+					hlast = epg.cursor.pointer;
+					vlast ? epg.cursor.down(vlast) : epg.cursor.down(document.querySelectorAll('.vertical .link')[0]);
+				}
+			}
+		}
+	});
+	hSwiper = new epg.swiper({
+		mode: 'list',
+		container: '.horizontal'
+	});
+	vSwiper = new epg.swiper({
+		mode: 'list',
+		container: '.vertical',
+		direction:'vertical'
+	});
+};
+</script>
+</head>
+<body>
+<div class="main">
+	<div class="switcher">
+		<div>Check the list and control( key: W/A/S/D )</div>
+		<label><input type="radio" name="switcher" value="horizontal" checked onchange="change();">horizontal</label>
+		<label><input type="radio" name="switcher" value="vertical" onchange="change();">vertical</label>
+	</div>
+	<div class="title">slide-horizontal</div>
+	<div class="horizontal">
+		<div class="swiper-button-prev">←</div>
+		<div class="swiper-container-horizontal">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide link">1</div>
+				<div class="swiper-slide link">2</div>
+				<div class="swiper-slide link">3</div>
+				<div class="swiper-slide link">4</div>
+				<div class="swiper-slide link">5</div>
+				<div class="swiper-slide link">6</div>
+				<div class="swiper-slide link">7</div>
+				<div class="swiper-slide link">8</div>
+				<div class="swiper-slide link">9</div>
+				<div class="swiper-slide link">10</div>
+				<div class="swiper-slide link">11</div>
+			</div>
+		</div>
+		<div class="swiper-button-next">→</div>
+	</div>
+	<div class="title">slide-vertical</div>
+	<div class="vertical">
+		<div class="swiper-button-prev">↑</div>
+		<div class="swiper-container-vertical">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide link">1</div>
+				<div class="swiper-slide link">2</div>
+				<div class="swiper-slide link">3</div>
+				<div class="swiper-slide link">4</div>
+				<div class="swiper-slide link">5</div>
+				<div class="swiper-slide link">6</div>
+				<div class="swiper-slide link">7</div>
+				<div class="swiper-slide link">8</div>
+				<div class="swiper-slide link">9</div>
+				<div class="swiper-slide link">10</div>
+				<div class="swiper-slide link">11</div>
+			</div>
+		</div>
+		<div class="swiper-button-next">↓</div>
+	</div>
+</div>
+</body>
+</html>

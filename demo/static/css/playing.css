@@ -1,0 +1,151 @@
+
+.top {
+	width: 1220px;
+	overflow: hidden;
+	position: absolute;
+	top: 25px;
+	left: 30px;
+}
+.top .video {
+	width: 808px;
+	height: 453px;
+	position: relative;
+	float: left;
+}
+.top .video img {
+	width: 808px;
+	height: 453px;
+}
+.top .video span {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .3);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+.top .video span img {
+	width: 75px;
+	height: 75px;
+	position: absolute;
+	top: 50%;
+	margin-top: -37px;
+	left: 50%;
+	margin-left: -37px;
+	z-index: 2;
+}
+.top .info {
+	width: 395px;
+	float: right;
+}
+.top .info .name {
+	color: #fff;
+	font-size: 25px;
+	line-height: 25px;
+}
+.top .info .name, .top .info .mname, .top .info .tel {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.top .info .ibox {
+	height: 215px;
+}
+.top .info .box {
+	color: #fff;
+	font-size: 20px;
+	line-height: 28px;
+	overflow: hidden;
+	padding-top: 25px;
+}
+.top .info .box span {
+	float: left;
+}
+.top .info .box  p {
+	width: 290px;
+	float: left;
+}
+.top .info .qrcode {
+	background: url(../images/dt_qrcode_bg.png) no-repeat;
+	width: 351px;
+	height: 147px;
+	margin-top: 40px;
+	position: relative;
+}
+.top .info .qrcode img {
+	width: 125px;
+	height: 125px;
+	position: absolute;
+	top: 50%;
+	margin-top: -62px;
+	right: 20px;
+}
+
+.turn {
+	position: absolute;
+	top: 485px;
+	left: 30px;
+}
+.turn .title {
+	color: #fff;
+	font-size: 25px;
+	line-height: 55px;
+}
+.list {
+	width: 1168px;
+	height: 154px;
+	margin-left: 10px;
+	position: relative;
+}
+.list .left, .list .right {
+	width: 14px;
+	height: 23px;
+	position: absolute;
+	top: 50%;
+	margin-top: -12px;
+}
+.list .left {
+	left: -17px;
+}
+.list .right {
+	right: -17px;
+}
+.list .items {
+	width: 1168px;
+	height: 154px;
+	overflow: hidden;
+	position: relative;
+}
+.list .items .box {
+	height: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 0;
+	white-space: nowrap;
+}
+.list .item {
+	width: 272px;
+	height: 154px;
+	margin: 0 10px;
+	position: relative;
+	display: inline-block;
+}
+.list .item img {
+	width: 272px;
+	height: 154px;
+}
+.list .item span {
+	width: 100%;
+	height: 30px;
+	background-color: rgba(0, 0, 0, .3);
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 2;
+	color: #fff;
+	font-size: 16px;
+	text-align: center;
+	line-height: 30px;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>List Detail</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/playing.css" />
+<script type="text/javascript">
+window.onload = function() {
+	var swiper;
+	epg.init({
+		controller: {
+			right: function() {
+				var next = epg.cursor.next('right');
+				var idx = epg.cursor.index('.list');
+				if(idx % 4 === 3) {
+					swiper.right();
+					epg.cursor.right(next);
+				} else {
+					epg.cursor.right();
+				}
+			},
+			left: function() {
+				var next = epg.cursor.next('left');
+				var idx = epg.cursor.index('.list');
+				if(idx % 4 === 0) {
+					swiper.left();
+					epg.cursor.left(next);
+				} else {
+					epg.cursor.left();
+				}
+			}
+		}
+	});
+	swiper = new epg.swiper({
+		mode: 'list',
+		container: '.list',
+		wrapper: '.box',
+		prevButton: '.left',
+		nextButton: '.right'
+	});
+};
+</script>
+</head>
+<body bgcolor="transparent" background="images/bg.jpg">
+<div class="main">
+	<div class="top">
+		<div class="video link">
+			<img src="images/dt_video.jpg" alt="">
+			<span><img src="images/play_ico.png" alt=""></span>
+		</div>
+		<div class="info">
+			<div class="name">Video name</div>
+			<div class="ibox">
+				<div class="box mname"><span>Name: </span><p>This is a merchant name.</p></div>
+				<div class="box tel"><span>Phone: </span><p>028-12345678</p></div>
+				<div class="box addr"><span>Addess: </span><p>This is an merchant address.</p></div>
+			</div>
+			<div class="qrcode"><img src="images/dt_qrcode.jpg" alt=""></div>
+		</div>
+	</div>
+	<div class="turn">
+		<div class="title">Video List</div>
+		<div class="list">
+			<div class="left"><img src="images/dt_left.png" alt=""></div>
+			<div class="items">
+				<div class="box">
+					<div class="item link">
+						<img src="images/dt_img.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/dt_img.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/dt_img.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/dt_img.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/dt_img.jpg" alt="">
+						<span>test</span>
+					</div>
+					<div class="item link">
+						<img src="images/dt_img.jpg" alt="">
+						<span>test</span>
+					</div>
+				</div>
+			</div>
+			<div class="right"><img src="images/dt_right.png" alt=""></div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

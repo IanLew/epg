@@ -1,4 +1,4 @@
-/*! epg-1.0.0.js create by Ian Lew 2018-03-28 */
+/*! epg-1.0.0.js create by Ian Lew 2018-03-30 */
 (function(win, doc, undefined) {
     var modules_core, modules_cursor, modules_swiper, epg;
     modules_core = function() {
@@ -161,22 +161,14 @@
                     return false;
                 } else {
                     var pnode = ele.parentNode,
-                        einfo = ele.getBoundingClientRect(),
-                        pinfo, pstyle;
+                        pstyle;
                     while (true) {
-                        pinfo = pnode.getBoundingClientRect();
                         pstyle = win.getComputedStyle(pnode, null);
-                        if (pnode.localName === 'body') {
-                            if (einfo.top < 0 || einfo.top > win.innerHeight || einfo.left < 0 || einfo.left + einfo.width > win.innerWidth) {
-                                return false;
-                            } else {
-                                return true;
-                            }
+                        if (pstyle.visibility === 'hidden' || pstyle.display === 'none' || pstyle.opacity === '0') {
+                            return false;
                         }
-                        if (pstyle.overflow === 'hidden') {
-                            if (einfo.top + einfo.height <= pinfo.top || einfo.top > pinfo.top + pinfo.height || einfo.left + einfo.width <= pinfo.left || einfo.left > pinfo.left + pinfo.width) {
-                                return false;
-                            }
+                        if (pnode.localName === 'body') {
+                            return true;
                         }
                         pnode = pnode.parentNode;
                     }
@@ -185,7 +177,7 @@
             },
             // There is an intersection.
             contains: function(cmin, cmax, nmin, nmax) {
-                return cmax - cmin + (nmax - nmin) > Math.max(cmin, cmax, cmin, cmax) - Math.min(cmin, cmax, nmin, nmax);
+                return Math.max(cmin, nmin) <= Math.min(cmax, nmax);
             },
             // Calculate the distance between two points.
             distance: function(cx, cy, nx, ny) {
@@ -279,12 +271,12 @@
                 }
             },
             // Determines whether the target is the parent of the focus.
-            eq: function(first, second) {
+            parent: function(first, second) {
                 if (core.type(first) === 'string') {
-                    first = document.querySelector(first);
+                    first = doc.querySelector(first);
                 }
                 if (core.type(second) === 'string') {
-                    second = document.querySelector(second);
+                    second = doc.querySelector(second);
                 }
                 if (core.type(first) === 'object' && first.nodeType) {
                     var pnode = second ? second.parentNode : this.pointer.parentNode;
@@ -304,19 +296,38 @@
                 }
                 return false;
             },
+            // Get index of the target.
+            index: function(parent, target) {
+                target = target || this.pointer;
+                var links;
+                if (core.type(parent) === 'string') {
+                    links = doc.querySelectorAll(parent + ' .link');
+                } else if (core.type(parent) === 'string') {
+                    links = parent.querySelectorAll('.link');
+                }
+                for (var i = 0, len = links.length; i < len; i++) {
+                    if (target.isSameNode(links[i])) {
+                        return i;
+                    }
+                }
+                return -1;
+            },
             // Get the dom ele of next by direction.
             next: function(dir) {
                 var pointer = this.pointer,
                     pinfo = infos(pointer);
-                var ninfo, dvalue, pref, min, vis;
+                var ninfo, pDvalue, mDvalue, pref, min;
                 var sets = doc.querySelectorAll(this.sign);
                 for (var i = 0, len = sets.length; i < len; i++) {
                     if (!sets[i].isSameNode(pointer)) {
                         ninfo = infos(sets[i], dir);
-                        var rule = rules(pinfo, ninfo, dvalue, dir);
-                        dvalue = rule.dvalue || dvalue;
-                        rule.pref && (pref = sets[i]);
-                        rule.min && (min = sets[i]);
+                        if (core.visible(sets[i])) {
+                            var rule = rules(pinfo, ninfo, pDvalue, mDvalue, dir);
+                            pDvalue = rule.pDvalue;
+                            mDvalue = rule.mDvalue;
+                            rule.pref && (pref = sets[i]);
+                            rule.min && (min = sets[i]);
+                        }
                     }
                 }
                 if (dir === 'left' || dir === 'right') {
@@ -376,55 +387,36 @@
             };
         }
         // Focus screening rule.
-        function rules(pinfo, ninfo, dvalue, dir) {
+        function rules(pinfo, ninfo, pDvalue, mDvalue, dir) {
             var tmp, pref, min;
             if (dir === 'up') {
                 if (pinfo.up > ninfo.down) {
                     tmp = core.distance(ninfo.left, ninfo.down, pinfo.left, pinfo.up);
-                    dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-                    if (tmp === dvalue) {
-                        min = true;
-                        if (core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right)) {
-                            pref = true;
-                        }
-                    }
+                    (!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+                    (!pDvalue || core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right) && tmp < pDvalue) && (pDvalue = tmp, pref = true);
                 }
             } else if (dir === 'down') {
                 if (pinfo.down < ninfo.up) {
                     tmp = core.distance(ninfo.left, ninfo.up, pinfo.left, pinfo.down);
-                    dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-                    if (tmp === dvalue) {
-                        min = true;
-                        if (core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right)) {
-                            pref = true;
-                        }
-                    }
+                    (!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+                    (!pDvalue || core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right) && tmp < pDvalue) && (pDvalue = tmp, pref = true);
                 }
             } else if (dir === 'left') {
                 if (pinfo.left > ninfo.right) {
                     tmp = core.distance(ninfo.right, ninfo.up, pinfo.left, pinfo.up);
-                    dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-                    if (tmp === dvalue) {
-                        min = true;
-                        if (core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down)) {
-                            pref = true;
-                        }
-                    }
+                    (!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+                    (!pDvalue || core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down) && tmp < pDvalue) && (pDvalue = tmp, pref = true);
                 }
             } else if (dir === 'right') {
                 if (pinfo.right < ninfo.left) {
                     tmp = core.distance(ninfo.left, ninfo.up, pinfo.right, pinfo.up);
-                    dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-                    if (tmp === dvalue) {
-                        min = true;
-                        if (core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down)) {
-                            pref = true;
-                        }
-                    }
+                    (!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+                    (!pDvalue || core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down) && tmp < pDvalue) && (pDvalue = tmp, pref = true);
                 }
             }
             return {
-                dvalue: dvalue,
+                pDvalue: pDvalue,
+                mDvalue: mDvalue,
                 pref: pref,
                 min: min
             };
@@ -434,7 +426,7 @@
     modules_swiper = function(core) {
         function swiper(options) {
             var defaults = {
-                type: 'none',
+                mode: 'none',
                 container: '.swiper-container',
                 wrapper: '.swiper-wrapper',
                 pagination: {
@@ -446,115 +438,113 @@
                 prevButton: '.swiper-button-prev',
                 nextButton: '.swiper-button-next',
                 direction: 'horizontal',
-                autoPlay: 3000,
+                autoPlay: 5000,
                 distance: 0
             };
-            var config = core.extend({}, defaults, options);
+            var config = core.extend(true, defaults, options);
             this.container = doc.querySelector(config.container);
             this.wrapper = this.container.querySelector(config.wrapper);
             this.prevButton = this.container.querySelector(config.prevButton);
             this.nextButton = this.container.querySelector(config.nextButton);
+            this.items = this.container.querySelectorAll(config.wrapper + ' > *');
+            this.itemNums = this.items.length;
             this.config = {};
-            if (config.type === 'none') {
-                if (this.items[0].offsetWidth == this.container.offsetWidth) {
-                    config.type = 'slide';
-                } else if (this.wrapper.offsetWidth > this.container.offsetWidth || this.items[0].offsetWidth < this.container.offsetWidth) {
-                    config.type = 'list';
+            if (config.mode === 'none' && this.itemNums) {
+                if (this.items[0].offsetWidth === this.wrapper.parentNode.offsetWidth) {
+                    config.mode = 'slide';
+                } else if (this.wrapper.offsetWidth > this.wrapper.parentNode.offsetWidth || this.items[0].offsetWidth < this.wrapper.parentNode.offsetWidth) {
+                    config.mode = 'list';
                 }
             }
-            if (config.type === 'list') {
+            if (config.mode === 'list') {
                 for (var j in config) {
-                    if (!/(autoPlay|speed|loop|pagination)/gi.test(j)) {
+                    if (!/autoPlay|speed|loop|pagination/gi.test(j)) {
                         this.config[j] = config[j];
                     }
                 }
                 if (this.config.direction === 'horizontal') {
-                    this.pageNum = Math.ceil(this.wrapper.offsetWidth / this.container.offsetWidth);
-                    this.scrollWidth = (this.pageNum - 1) * this.container.offsetWidth;
-                    this.distance = config.distance ? config.distance : this.container.offsetWidth;
+                    this.pageNum = Math.ceil(this.wrapper.offsetWidth / this.wrapper.parentNode.offsetWidth);
+                    this.scrollWidth = this.wrapper.offsetWidth - this.wrapper.parentNode.offsetWidth;
+                    this.distance = config.distance ? config.distance : this.wrapper.parentNode.offsetWidth;
                 } else if (this.config.direction === 'vertical') {
-                    this.pageNum = Math.ceil(this.wrapper.offsetHeight / this.container.offsetHeight);
-                    this.scrollWidth = (this.pageNum - 1) * this.container.offsetHeight;
-                    this.distance = config.distance ? config.distance : this.container.offsetHeight;
+                    this.pageNum = Math.ceil(this.wrapper.offsetHeight / this.wrapper.parentNode.offsetHeight);
+                    this.scrollWidth = this.wrapper.offsetHeight - this.wrapper.parentNode.offsetHeight;
+                    this.distance = config.distance ? config.distance : this.wrapper.parentNode.offsetHeight;
                 }
                 this.currentPage = 1;
-            } else if (config.type === 'slide') {
+            } else if (config.mode === 'slide') {
                 for (var k in config) {
-                    if (!/(scrollbar|distance)/gi.test(k)) {
+                    if (!/scrollbar|distance/gi.test(k)) {
                         this.config[k] = config[k];
                     }
                 }
-                this.pagination = this.container.querySelector(config.pagination.wrapper);
-                this.items = this.container.querySelectorAll(config.wrapper + ' > *');
-                this.itemNums = this.items.length;
-                if (this.itemNums && this.pagination) {
-                    var text = '';
+                this.pagination = this.container.querySelector(this.config.pagination.wrapper);
+                this.currentIdx = 0;
+                if (this.itemNums) {
+                    var text = '',
+                        normal = this.config.pagination.normal.replace(/^\./g, ''),
+                        active = this.config.pagination.active.replace(/^\./g, '');
                     for (var i = 0; i < this.itemNums; i++) {
                         if (i === this.currentIdx) {
-                            text += '<' + this.config.pagination.tagName + ' class="' + this.config.pagination.normal + ' ' + this.config.pagination.active + '"></' + this.config.pagination.tagName + '>';
+                            this.pagination && (text += '<' + this.config.pagination.tagName + ' class="' + normal + ' ' + active + '"></' + this.config.pagination.tagName + '>');
+                            this.items[i].style.zIndex = 2;
                         } else {
-                            text += '<' + this.config.pagination.tagName + ' class="' + this.config.pagination.normal + '"></' + this.config.pagination.tagName + '>';
+                            this.pagination && (text += '<' + this.config.pagination.tagName + ' class="' + normal + '"></' + this.config.pagination.tagName + '>');
+                            this.items[i].style.zIndex = 1;
                         }
                     }
-                    this.pagination.innerHTML = text;
-                    this.allPagination = this.pagination.querySelectorAll(this.config.pagination.normal);
-                    this.currPagination = this.pagination.querySelector(this.config.pagination.active);
-                    this.currentIdx = 0;
-                }
-                if (this.autoPlay) {
-                    var _this = this;
-                    if (this.direction === 'horizontal') {
-                        setInterval(_this.left, _this.autoPlay);
-                    } else if (this.config.direction === 'vertical') {
-                        setInterval(_this.up, _this.autoPlay);
+                    if (this.pagination) {
+                        this.pagination.innerHTML = text;
+                        this.allPagination = this.pagination.querySelectorAll(this.config.pagination.normal);
+                        this.currPagination = this.pagination.querySelector(this.config.pagination.active);
                     }
                 }
+                this.config.autoPlay && this.autoPlay();
             }
-            if (this.prevButton || this.nextButton) {
-                this.contrls();
-            }
+            (this.prevButton || this.nextButton) && this.contrls();
         }
         swiper.prototype = {
             left: function() {
-                this.move('left');
+                this.move('left', arguments[0]);
             },
             right: function() {
-                this.move('right');
+                this.move('right', arguments[0]);
             },
             up: function() {
-                this.move('up');
+                this.move('up', arguments[0]);
             },
             down: function() {
-                this.move('down');
+                this.move('down', arguments[0]);
             },
-            move: function(dir) {
-                if (this.config.type === 'slide') {
+            move: function(dir, auto) {
+                if (this.config.mode === 'slide') {
+                    if (!auto) {
+                        var _this = this;
+                        this.delayTimer && clearTimeout(this.delayTimer);
+                        this.slideTimer && clearInterval(this.slideTimer);
+                        this.delayTimer = null, this.slideTimer = null;
+                        this.delayTimer = setTimeout(function() {
+                            _this.autoPlay();
+                        }, _this.config.autoPlay);
+                    }
                     this.items[this.currentIdx].style.zIndex = 1;
-                    this.allPagination[this.currentIdx].classList.remove(this.config.pagination.active);
+                    this.allPagination && this.allPagination[this.currentIdx].classList.remove(this.config.pagination.active.replace(/^\./g, ''));
                     if (this.config.direction === 'horizontal') {
                         if (dir === 'left') {
-                            if (this.currentIdx > 0) {
-                                --this.currentIdx;
-                            } else {
-                                this.currentIdx = this.itemNums - 1;
-                            }
+                            this.currentIdx = this.currentIdx > 0 ? this.currentIdx - 1 : this.itemNums - 1;
                         } else if (dir === 'right') {
                             this.currentIdx = (this.currentIdx + 1) % this.itemNums;
                         }
                     } else if (this.config.direction === 'vertical') {
                         if (dir === 'up') {
-                            this.currentIdx = (this.currentIdx + 1) % this.itemNums;
+                            this.currentIdx = this.currentIdx > 0 ? this.currentIdx - 1 : this.itemNums - 1;
                         } else if (dir === 'down') {
-                            if (this.currentIdx > 0) {
-                                --this.currentIdx;
-                            } else {
-                                this.currentIdx = this.itemNums - 1;
-                            }
+                            this.currentIdx = (this.currentIdx + 1) % this.itemNums;
                         }
                     }
-                    this.items[this.currentIdx].style.zIndex = 10;
-                    this.allPagination[this.currentIdx].classList.add(this.config.pagination.active);
-                } else if (this.config.type === 'list') {
+                    this.items[this.currentIdx].style.zIndex = 2;
+                    this.allPagination && this.allPagination[this.currentIdx].classList.add(this.config.pagination.active.replace(/^\./g, ''));
+                } else if (this.config.mode === 'list') {
                     if (this.config.direction === 'horizontal') {
                         if (dir === 'left') {
                             if (this.currentPage > 1) {
@@ -569,41 +559,44 @@
                         }
                     } else if (this.config.direction === 'vertical') {
                         if (dir === 'up') {
-                            if (this.currentPage < this.pageNum) {
-                                this.wrapper.style.top = this.wrapper.offsetTop - this.distance + 'px';
-                                ++this.currentPage;
-                            }
-                        } else if (dir === 'down') {
                             if (this.currentPage > 1) {
                                 this.wrapper.style.top = this.wrapper.offsetTop + this.distance + 'px';
                                 --this.currentPage;
                             }
+                        } else if (dir === 'down') {
+                            if (this.currentPage < this.pageNum) {
+                                this.wrapper.style.top = this.wrapper.offsetTop - this.distance + 'px';
+                                ++this.currentPage;
+                            }
                         }
                     }
                 }
-                if (this.prevButton || this.nextButton) {
-                    this.contrls();
-                }
+                (this.prevButton || this.nextButton) && this.contrls();
             },
             // Scroll button.
             contrls: function() {
-                if (this.type === 'slide') {
-                    if (this.itemNums > 1) {
-                        if (this.currentIdx > 0 && this.currentIdx < this.itemNums - 1) {
-                            this.prevButton.style.display = 'block';
-                            this.nextButton.style.display = 'block';
-                        } else if (this.currentIdx === 0) {
+                if (this.config.mode === 'slide') {
+                    if (this.config.autoPlay) {
+                        this.prevButton.style.display = 'block';
+                        this.nextButton.style.display = 'block';
+                    } else {
+                        if (this.itemNums > 1) {
+                            if (this.currentIdx > 0 && this.currentIdx < this.itemNums - 1) {
+                                this.prevButton.style.display = 'block';
+                                this.nextButton.style.display = 'block';
+                            } else if (this.currentIdx === 0) {
+                                this.prevButton.style.display = 'none';
+                                this.nextButton.style.display = 'block';
+                            } else if (this.currentIdx === this.itemNums - 1) {
+                                this.prevButton.style.display = 'block';
+                                this.nextButton.style.display = 'none';
+                            }
+                        } else {
                             this.prevButton.style.display = 'none';
-                            this.nextButton.style.display = 'block';
-                        } else if (this.currentIdx === this.itemNums - 1) {
-                            this.prevButton.style.display = 'block';
                             this.nextButton.style.display = 'none';
                         }
-                    } else {
-                        this.prevButton.style.display = 'none';
-                        this.nextButton.style.display = 'none';
                     }
-                } else if (this.type === 'list') {
+                } else if (this.config.mode === 'list') {
                     if (this.scrollWidth > 0) {
                         var offset;
                         if (this.config.direction === 'horizontal') {
@@ -629,6 +622,21 @@
                     this.prevButton.style.display = 'none';
                     this.nextButton.style.display = 'none';
                 }
+            },
+            // Slide mode autoplay.
+            autoPlay: function() {
+                var _this = this;
+                if (this.slideTimer) {
+                    if (this.config.direction === 'horizontal') {
+                        this.slideTimer = setInterval(function() {
+                            _this.right(true);
+                        }, _this.config.autoPlay);
+                    } else if (this.config.direction === 'vertical') {
+                        this.slideTimer = setInterval(function() {
+                            _this.down(true);
+                        }, _this.config.autoPlay);
+                    }
+                }
             }
         };
         return swiper;
@@ -642,29 +650,31 @@
                         sign: '.link',
                         first: doc.querySelector('.link'),
                         rim: '.pseudo',
+                        mode: 'outer',
                         border: '#ffde00 solid 2px',
                         shadow: '0 0 8px 1px #000',
                         effect: null
                     }
                 };
-                var config;
-                if (!(args && args.border && args.shadow)) {
+                var config = core.extend(true, defaults, args);
+                if (!args || args.mode === 'inline') {
+                    core.cursor = new cursor(config.cursor);
+                } else {
                     var cfg = {};
-                    for (var i in defaults.cursor) {
-                        if (!/(border|shadow)/gi.test(i)) {
-                            cfg[i] = defaults.cursor[i];
+                    for (var i in config.cursor) {
+                        if (!/border|shadow/gi.test(i)) {
+                            cfg[i] = config.cursor[i];
                         }
                     }
-                    defaults.cursor = cfg;
+                    core.cursor = new cursor(cfg);
                 }
-                config = core.extend({}, defaults, args);
-                core.cursor = new cursor(config.cursor);
                 core.left = config.controller.left;
                 core.right = config.controller.right;
                 core.up = config.controller.up;
                 core.down = config.controller.down;
                 core.enter = config.controller.enter;
                 core.back = config.controller.back;
+                core.state = 'initialization';
             },
             swiper: swiper
         });
@@ -695,10 +705,10 @@
             if (keycode === 768) {
                 if (typeof Utility !== 'undefined') {
                     var oEvent = Utility.getEvent();
-                    eventHandler(oEvent.type, true);
+                    core.state && eventHandler(oEvent.type, true);
                 }
             } else {
-                eventHandler(keycode);
+                core.state && eventHandler(keycode);
             }
         }
         doc.onsystemevent = grabEvent;

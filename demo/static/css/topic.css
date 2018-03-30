@@ -1,0 +1,140 @@
+
+.list {
+	width: 198px;
+	position: absolute;
+	top: 42px;
+	left: 120px;
+}
+.list .up, .list .down {
+	width: 23px;
+	height: 14px;
+	position: absolute;
+	left: 50%;
+	margin-left: -12px;
+}
+.list .up {
+	top: -15px;
+}
+.list .down {
+	bottom: -15px;
+}
+.list .items {
+	height: 628px;
+	overflow: hidden;
+	position: relative;
+}
+.list .items .box {
+	width: 100%;
+	height: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.list .item {
+	width: 198px;
+	height: 110px;
+	margin: 13px 0;
+	position: relative;
+}
+.list .item img {
+	width: 198px;
+	height: 110px;
+}
+.list .item span {
+	width: 100%;
+	height: 25px;
+	background-color: rgba(0, 0, 0, .3);
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 2;
+	color: #fff;
+	font-size: 13px;
+	text-align: center;
+	line-height: 25px;
+}
+
+.vbox {
+	width: 808px;
+	position: absolute;
+	top: 55px;
+	left: 350px;
+}
+.vbox .video {
+	width: 808px;
+	height: 453px;
+	position: relative;
+}
+.vbox .video img {
+	width: 808px;
+	height: 453px;
+}
+.vbox .video span {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .3);
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2;
+}
+.vbox .video span img {
+	width: 75px;
+	height: 75px;
+	position: absolute;
+	top: 50%;
+	margin-top: -37px;
+	left: 50%;
+	margin-left: -37px;
+	z-index: 2;
+}
+.vbox .ibox {
+	margin-top: 15px;
+	overflow: hidden;
+}
+.vbox .info {
+	width: 440px;
+	float: left;
+}
+.vbox .info .name {
+	color: #fff;
+	font-size: 24px;
+	line-height: 24px;
+	padding-bottom: 5px;
+}
+.vbox .info .name, 
+.vbox .info .mname, 
+.vbox .info .tel {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.vbox .info .box {
+	color: #fff;
+	font-size: 18px;
+	line-height: 25px;
+	overflow: hidden;
+	padding-top: 8px;
+}
+.vbox .info .box span {
+	float: left;
+}
+.vbox .info .box p {
+	width: 350px;
+	float: left;
+}
+.vbox .qrcode {
+	background: url(../images/topic_qrcode_bg.png) no-repeat;
+	width: 351px;
+	height: 147px;
+	float: right;
+	position: relative;
+}
+.vbox .qrcode img {
+	width: 125px;
+	height: 125px;
+	position: absolute;
+	top: 50%;
+	margin-top: -62px;
+	right: 18px;
+}

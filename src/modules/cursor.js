@@ -68,12 +68,12 @@ define(['modules/core'], function(core) {
 			}
 		},
 		// Determines whether the target is the parent of the focus.
-		eq: function(first, second) {
+		parent: function(first, second) {
 			if (core.type(first) === 'string') {
-				first = document.querySelector(first);
+				first = doc.querySelector(first);
 			}
 			if (core.type(second) === 'string') {
-				second = document.querySelector(second);
+				second = doc.querySelector(second);
 			}
 
 			if (core.type(first) === 'object' && first.nodeType) {
@@ -96,26 +96,47 @@ define(['modules/core'], function(core) {
 
 			return false;
 		},
+		// Get index of the target.
+		index: function(parent, target) {
+			target = target || this.pointer;
+
+			var links;
+			if (core.type(parent) === 'string') {
+				links = doc.querySelectorAll(parent + ' .link');
+			} else if (core.type(parent) === 'string') {
+				links = parent.querySelectorAll('.link');
+			}
+			for (var i = 0, len = links.length; i < len; i++) {
+				if (target.isSameNode(links[i])) {
+					return i;
+				}
+			}
+
+			return -1;
+		},
 		// Get the dom ele of next by direction.
 		next: function(dir) {
 			var pointer = this.pointer,
 				pinfo = infos(pointer);
 			var ninfo,
-				dvalue,
+				pDvalue,
+				mDvalue,
 				pref,
-				min,
-				vis;
+				min;
 			var sets = doc.querySelectorAll(this.sign);
 
 			for (var i = 0, len = sets.length; i < len; i++) {
 				if (!sets[i].isSameNode(pointer)) {
 					ninfo = infos(sets[i], dir);
 
-					var rule = rules(pinfo, ninfo, dvalue, dir);
+					if (core.visible(sets[i])) {
+						var rule = rules(pinfo, ninfo, pDvalue, mDvalue, dir);
 
-					dvalue = rule.dvalue || dvalue;
-					rule.pref && (pref = sets[i]);
-					rule.min && (min = sets[i]);
+						pDvalue = rule.pDvalue;
+						mDvalue = rule.mDvalue;
+						rule.pref && (pref = sets[i]);
+						rule.min && (min = sets[i]);
+					}
 				}
 			}
 
@@ -185,61 +206,42 @@ define(['modules/core'], function(core) {
 	}
 
 	// Focus screening rule.
-	function rules(pinfo, ninfo, dvalue, dir) {
+	function rules(pinfo, ninfo, pDvalue, mDvalue, dir) {
 		var tmp, pref, min;
 
 		if (dir === 'up') {
 			if (pinfo.up > ninfo.down) {
 				tmp = core.distance(ninfo.left, ninfo.down, pinfo.left, pinfo.up);
-				dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-				if (tmp === dvalue) {
-					min = true;
-					if (core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right)) {
-						pref = true;
-					}
-				}
+				(!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+				(!pDvalue || (core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right) && tmp < pDvalue)) && (pDvalue = tmp, pref = true);
 			}
 		} else if (dir === 'down') {
 			if (pinfo.down < ninfo.up) {
 				tmp = core.distance(ninfo.left, ninfo.up, pinfo.left, pinfo.down);
-				dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-				if (tmp === dvalue) {
-					min = true;
-					if (core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right)) {
-						pref = true;
-					}
-				}
+				(!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+				(!pDvalue || (core.contains(ninfo.left, ninfo.right, pinfo.left, pinfo.right) && tmp < pDvalue)) && (pDvalue = tmp, pref = true);
 			}
 		} else if (dir === 'left') {
 			if (pinfo.left > ninfo.right) {
 				tmp = core.distance(ninfo.right, ninfo.up, pinfo.left, pinfo.up);
-				dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-				if (tmp === dvalue) {
-					min = true;
-					if (core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down)) {
-						pref = true;
-					}
-				}
+				(!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+				(!pDvalue || (core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down) && tmp < pDvalue)) && (pDvalue = tmp, pref = true);
 			}
 		} else if (dir === 'right') {
 			if (pinfo.right < ninfo.left) {
 				tmp = core.distance(ninfo.left, ninfo.up, pinfo.right, pinfo.up);
-				dvalue = typeof dvalue === 'undefined' ? tmp : Math.min(tmp, dvalue);
-				if (tmp === dvalue) {
-					min = true;
-					if (core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down)) {
-						pref = true;
-					}
-				}
+				(!mDvalue || tmp < mDvalue) && (mDvalue = tmp, min = true);
+				(!pDvalue || (core.contains(ninfo.up, ninfo.down, pinfo.up, pinfo.down) && tmp < pDvalue)) && (pDvalue = tmp, pref = true);
 			}
 		}
 
 		return {
-			dvalue: dvalue,
+			pDvalue: pDvalue,
+			mDvalue: mDvalue,
 			pref: pref,
 			min: min
 		};
 	}
 
 	return cursor;
-});
+})

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Swiper-slide Test</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="../static/css/common.css" />
+<link rel="stylesheet" type="text/css" href="../static/css/sample/swiper-slide.css" />
+<script type="text/javascript">
+var checked;
+function change() {
+	var switcher = document.getElementsByName('switcher');
+	for(var i = 0, len = switcher.length; i < len; i++) {
+		if(switcher[i].checked) {
+			checked = switcher[i].value;
+			break;
+		}
+	}
+}
+window.onload = function() {
+	var hSwiper, vSwiper;
+    epg.init({
+    	controller: {
+    		left: function() {
+    			epg.cursor.parent('.swiper-container-horizontal') && hSwiper.left();
+    		},
+    		right: function() {
+    			epg.cursor.parent('.swiper-container-horizontal') && hSwiper.right();
+    		},
+    		up: function() {
+    			var next = epg.cursor.next('up');
+    			epg.cursor.parent('.swiper-container-vertical') && vSwiper.up();    			
+    			epg.cursor.parent('.swiper-container-vertical') && checked === 'horizontal' && epg.cursor.up(next);
+    		},
+    		down: function() {
+    			var next = epg.cursor.next('down');
+    			epg.cursor.parent('.swiper-container-vertical') && vSwiper.down();
+    			epg.cursor.parent('.swiper-container-horizontal') && checked === 'vertical' && epg.cursor.down(next);
+    		}
+    	},
+    	cursor: {
+    		mode: 'inline'
+    	}
+    });
+	hSwiper = new epg.swiper({
+		type: 'slide',
+		container: '.swiper-container-horizontal',
+		autoPlay: 4500
+	});
+	vSwiper = new epg.swiper({
+		type: 'slide',
+		container: '.swiper-container-vertical',
+		direction: 'vertical',
+		autoPlay: 5500
+	});
+};
+</script>
+</head>
+<body>
+<div class="main">
+	<div class="switcher">
+		<div>Check the slide and control( key: W/A/S/D )</div>
+		<label><input type="radio" name="switcher" value="horizontal" checked onchange="change();">horizontal</label>
+		<label><input type="radio" name="switcher" value="vertical" onchange="change();">vertical</label>
+	</div>
+	<div class="title">swiper-horizontal</div>
+	<div class="swiper-container-horizontal">
+		<div class="swiper-button-prev">←</div>
+		<div class="swiper-wrapper link">
+			<div class="swiper-slide">1</div>
+			<div class="swiper-slide">2</div>
+			<div class="swiper-slide">3</div>
+		</div>
+		<div class="swiper-button-next">→</div>
+		<div class="swiper-pagination"></div>
+	</div>
+	<div class="title">swiper-vertical</div>
+	<div class="swiper-container-vertical">
+		<div class="swiper-button-prev">↑</div>
+		<div class="swiper-wrapper link">
+			<div class="swiper-slide">1</div>
+			<div class="swiper-slide">2</div>
+			<div class="swiper-slide">3</div>
+		</div>
+		<div class="swiper-button-next">↓</div>
+		<div class="tb">
+			<div class="swiper-pagination"></div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

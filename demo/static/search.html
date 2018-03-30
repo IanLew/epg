@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>搜索</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/search.css" />
+<script type="text/javascript">
+window.onload = function() {
+	getKeybord('en');
+	
+	epg.init({
+		controller: {
+			enter: function() {
+				epg.cursor.parent('.keybord') && fillKeyword();
+			}
+		}
+	});
+
+	function getKeybord(type) {
+		var keybord = {
+			num: function() {
+				var numText = '<div class="num">';
+				for(var i = 49, j = 0; i <= 57; i++, j++) {
+					if(j % 3 == 2) {
+						numText += '<div class="link" style="margin-right: 0;">' + String.fromCharCode(i) + '</div>';
+					} else {
+						numText += '<div class="link">' + String.fromCharCode(i) + '</div>';
+					}
+				}
+				numText += '<div class="link cv" style="margin-bottom: 0;">ABC</div>';
+				numText += '<div class="link" style="margin-bottom: 0;">0</div>';
+				numText += '<div class="link del" style="margin: 0;"></div>';
+				numText += '</div>';
+
+				return numText;
+			},
+			en: function() {
+				var enText = '<div class="en">';
+				for(var i = 65, j = 0; i <= 89; i++, j++) {
+					if(j % 5 == 4) {
+						enText += '<div class="link" style="margin-right: 0;">' + String.fromCharCode(i) + '</div>';
+					} else {
+						enText += '<div class="link">' + String.fromCharCode(i) + '</div>';
+					}
+				}
+				enText += '<div class="link cv" style="margin-bottom: 0;">123</div>';
+				enText += '<div class="link" style="margin: 0 64px;">Z</div>';
+				enText += '<div class="link del" style="margin: 0 0 0 11px;"></div>';
+				enText += '</div>';
+
+				return enText;
+			}
+		};
+
+		document.querySelector('.keybord').innerHTML = keybord[type]();
+	}
+
+	function fillKeyword() {
+		var text = epg.cursor.pointer.innerText;
+		var span = document.querySelector('.sbox span');
+
+		if(text === 'ABC') {
+			getKeybord('en');
+			epg.cursor.move(document.querySelectorAll('.keybord .link')[0]);
+		} else if(text === '123') {
+			getKeybord('num');
+			epg.cursor.move(document.querySelectorAll('.keybord .link')[0]);
+		} else if(text === '') {
+			var spanText = span.innerText;
+			if(spanText !== 'Search') {
+				span.innerHTML = spanText.substring(0, spanText.length - 1);
+				if(span.innerText === '') {
+					span.innerHTML = 'Search';
+					var rst = document.querySelector('.result');
+					rst.querySelector('.items').innerHTML = '';
+					rst.classList.remove('slist');
+					rst.classList.remove('empty');
+				} else {
+					search();
+				}
+			}
+		} else {
+			var spanText = span.innerText;
+			span.innerHTML = spanText === 'Search' ? text : spanText + text;
+			search();
+		}
+	}
+
+	function search() {
+		var rst = document.querySelector('.result');
+		if(0) {
+			var text = '';
+			
+			text += '<div class="item link">';
+			text += '<img src="images/search_rst_img.jpg" alt="">';
+			text += '<span>Test</span>';
+			text += '</div>';
+
+			rst.querySelector('.items').innerHTML = text;
+			rst.classList.add('slist');
+			rst.classList.remove('empty');
+		} else {
+			rst.classList.add('empty');
+			rst.classList.remove('slist');
+		}
+	}
+};
+</script>
+</head>
+<body bgcolor="transparent" background="images/bg.jpg">
+<div class="main">
+	<div class="search">
+		<div class="sbox">
+			<img src="images/seach_ico.png" alt="">
+			<span>Search</span>
+		</div>
+		<div class="keybord"></div>
+		<div class="tips">
+			<h6>Supports initials or words.</h6>
+			<p>Such as: food</p>
+			<p>Enter initial: F</p>
+			<p>Enter word: FOOD</p>
+		</div>
+	</div>
+	<div class="result">
+		<div class="null">Oooops! It doesn't exist.</div>
+		<div class="items"></div>
+	</div>
+</div>
+</body>
+</html>

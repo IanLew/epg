@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>话题</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/topic.css" />
+<script type="text/javascript">
+window.onload = function() {
+    var swiper;
+	epg.init({
+		controller: {
+			up: function() {
+				var next = epg.cursor.next('up');
+				var idx = epg.cursor.index('.list');
+				if(idx % 5 === 0) {
+					swiper.up();
+					epg.cursor.up(next);
+				} else {
+					epg.cursor.up();
+				}
+			},
+			down: function() {
+				var next = epg.cursor.next('down');
+				var idx = epg.cursor.index('.list');
+				if(idx % 5 === 4) {
+					swiper.down();
+					epg.cursor.down(next);
+				} else {
+					epg.cursor.down();
+				}
+			}
+		},
+		cursor: {
+			first: document.querySelector('.video')
+		}
+	});
+	swiper = new epg.swiper({
+		mode: 'list',
+		container: '.list',
+		wrapper: '.box',
+		prevButton: '.up',
+		nextButton: '.down',
+		direction:'vertical',
+		distance: 615
+	});
+};
+</script>
+</head>
+<body bgcolor="transparent" background="images/bg.jpg">
+<div class="main">
+	<div class="list">
+		<div class="up"><img src="images/topic_up.png" alt=""></div>
+		<div class="items">
+			<div class="box">
+				<div class="item link">
+					<img src="images/topic_img.jpg" alt="">
+					<span>test</span>
+				</div>
+				<div class="item link">
+					<img src="images/topic_img.jpg" alt="">
+					<span>test</span>
+				</div>
+				<div class="item link">
+					<img src="images/topic_img.jpg" alt="">
+					<span>test</span>
+				</div>
+				<div class="item link">
+					<img src="images/topic_img.jpg" alt="">
+					<span>test</span>
+				</div>
+				<div class="item link">
+					<img src="images/topic_img.jpg" alt="">
+					<span>test</span>
+				</div>
+				<div class="item link">
+					<img src="images/topic_img.jpg" alt="">
+					<span>test</span>
+				</div>
+				<div class="item link">
+					<img src="images/topic_img.jpg" alt="">
+					<span>test</span>
+				</div>
+			</div>
+		</div>
+		<div class="down"><img src="images/topic_down.png" alt=""></div>
+	</div>
+	<div class="vbox">
+		<div class="video link">
+			<img src="images/topic_video.jpg" alt="">
+			<span><img src="images/play_ico.png" alt=""></span>
+		</div>
+		<div class="ibox">
+			<div class="info">
+				<div class="name">Video name</div>
+				<div class="box mname"><span>Name: </span><p>This is a merchant name.</p></div>
+				<div class="box tel"><span>Phone: </span><p>028-12345678</p></div>
+				<div class="box addr"><span>Addess: </span><p>This is an merchant address.</p></div>
+			</div>
+			<div class="qrcode"><img src="images/topic_qrcode.jpg" alt=""></div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

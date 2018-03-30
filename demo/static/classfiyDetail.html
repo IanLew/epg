@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Classfiy Detail</title>
+<script type="text/javascript" src="../../build/epg.js"></script>
+<link rel="stylesheet" type="text/css" href="css/common.css" />
+<link rel="stylesheet" type="text/css" href="css/category.css" />
+<script type="text/javascript">
+window.onload = function() {
+    epg.init({
+    	controller: {
+    		left: function() {
+    			var next = epg.cursor.next('left');
+    			if(epg.cursor.parent('.cbox') && next.isSameNode(document.querySelector('.search'))) {
+    				epg.cursor.left(epg.cursor.pointer);
+    			} else {
+    				epg.cursor.left();
+    			}
+    		}
+    	},
+		cursor: {
+			first: document.querySelectorAll('.category .link')[0]
+		}
+    });
+};
+</script>
+</head>
+<body bgcolor="transparent" background="images/bg.jpg">
+<div class="main">
+	<div class="top">
+		<div class="left">
+			<div class="search link"><img src="images/ind_search_ico.png" alt=""></div>
+			<div class="notice link"><img src="images/ind_notice_ico.png" alt=""></div>
+			<div class="msg"><marquee>This is a marquee.</marquee></div>
+		</div>
+		<div class="right">
+			<div class="logo"><img src="images/logo.png" alt=""></div>
+			<div class="time">15:00</div>
+		</div>
+	</div>
+	<div class="cnt">
+		<!-- category -->
+		<div class="category">
+			<div class="box">
+				<div class="cate cate1 link">category 1</div>
+				<div class="cate cate2 link">category 2</div>
+				<div class="cate cate3 link">category 3</div>
+				<div class="cate cate4 link">category 4</div>
+			</div>
+		</div>
+		<!-- list -->
+		<div class="cbox">
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+			<div class="item link">
+				<img src="images/cate_img.jpg" alt="">
+				<span>test</span>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
