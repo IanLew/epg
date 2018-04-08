@@ -32,17 +32,17 @@ The configuration item reference API file [API.md](https://github.com/IanLew/epg
 
 >It is worth remembering that it must be used after the document is loaded. You can use it in function `window.onload`, or you can write it in the end. If you use synchronous loading, the initialization should be in the synchronous completion function.
 
-You can see examples in the [demo/](https://github.com/IanLew/epg/tree/master/demo) directory, the pages under the [sample/](https://github.com/IanLew/epg/tree/master/demo/sample) directory are a few simple answers, the pages under the [static/](https://github.com/IanLew/epg/tree/master/demo/static) directory are used under the project.
+You can see examples in the [demo/](https://github.com/IanLew/epg/tree/master/demo) directory, the pages under the [sample/](https://github.com/IanLew/epg/tree/master/demo/sample) directory are a few simple answers, the pages under the [project/](https://github.com/IanLew/epg/tree/master/demo/project) directory are used under the project.
 
 ## Build
 This is the result of the project I have been working on for several months, and I hope it will be useful to you. Due to personal open source, not the nature of the company, the code is a reversion of personal arrangement after work. If you think my code is bad, or if you want to add your own code, you can rewrite the code.<br>
 First, you need to `clone` my source code, it looks like crap, but I like crap.<br>
 Then install the dependency package, in repo's root:
-
-		$ npm install
-	
+```
+$ npm install
+```
 And build development environment:
-
-		$ grunt
-	
+```
+$ grunt
+```	
 Production version will available in `build/` directory.

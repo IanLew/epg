@@ -1,4 +1,4 @@
-/*! epg-1.0.0.js create by Ian Lew 2018-03-30 */
+/*! epg-1.0.0.js create by Ian Lew 2018-04-07 */
 (function(win, doc, undefined) {
     var modules_core, modules_cursor, modules_swiper, epg;
     modules_core = function() {
