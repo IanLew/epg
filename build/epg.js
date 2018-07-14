@@ -177,7 +177,7 @@
             },
             // There is an intersection.
             contains: function(cmin, cmax, nmin, nmax) {
-                return (cmax - cmin) + (nmax - min) >= Math.max(cmin, cmax, nmin, nmax) - Math.min(cmin, cmax, nmin, nmax);
+                return (cmax - cmin) + (nmax - nmin) >= Math.max(cmin, cmax, nmin, nmax) - Math.min(cmin, cmax, nmin, nmax);
             },
             // Calculate the distance between two points.
             distance: function(cx, cy, nx, ny) {
