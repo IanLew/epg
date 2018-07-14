@@ -203,8 +203,8 @@ define(function() {
 		},
 		// There is an intersection.
 		contains: function(cmin, cmax, nmin, nmax) {
-			return Math.max(cmin, nmin) <= Math.min(cmax, nmax);;
-		},
+                	return (cmax - cmin) + (nmax - nmin) >= Math.max(cmin, cmax, nmin, nmax) - Math.min(cmin, cmax, nmin, nmax);
+            	},
 		// Calculate the distance between two points.
 		distance: function(cx, cy, nx, ny) {
 			return parseInt(Math.sqrt(Math.pow(cx - nx, 2) + Math.pow(cy - ny, 2)));
