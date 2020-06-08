@@ -1,2 +1,5 @@
 # Epg
 [Nn]ode_modules/
+
+# Security
+package-lock.json
