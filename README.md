@@ -1,48 +1,59 @@
 # Epg
-Epg is a javascript plug-in developed for China telecom's set-top box page.<br>
-This plug-in builds on the more complex interaction of the page. If your page is very simple, it is recommended to manually set the focus and not recommend using the plugin. For example, your page has very few focal points, just a few images. Of course, I would suggest that the design be simple, simple and easy to interact with.<br>
-If not, I'll tell you why `epg` exists.
+**Epg已停止维护**<br>
 
-## Getting Started
-Clone from this page, copy the [epg.js](https://github.com/IanLew/epg/blob/master/build/epg.js)/[epg.min.js](https://github.com/IanLew/epg/blob/master/build/epg.min.js) file from the [build/](https://github.com/IanLew/epg/tree/master/build) directory to your project.<br>
-Reference on the page:
+**它是我多年前做机顶盒开发时编写，最初基于jQuery，后来觉得太笨重，于是改用原生JavaScript开源。开源的时候故意写了中式英文文档，意思是不太推荐直接使用，毕竟没有经过机顶盒测试。开源后，偶尔会收到开发者的留言，我给不了太大的建议，已经过去很多年不太了解现在机顶盒的兼容，这个插件顶多起到引导思路的作用。由于我还不清楚怎样设置代码处于不维护状态，于是将文档改为中文，并留下这段话**<br>
+
+Epg是为电信机顶盒页面开发的javascript插件，主要为了解决交互复杂情况下焦点移动的问题。如果您的页面非常简单，建议手动设置焦点，不建议使用插件。 例如，您的页面只有很少的焦点，只有一些图片。 当然，我建议设计简单，易于交互。 
+
+## 相关介绍
+从[build](https://github.com/IanLew/epg/tree/master/build)目录中将文件[epg.min.js](https://github.com/IanLew/epg/blob/master/build/epg.min.js)拷贝到您的项目中。<br>
+
+在页面上引入:
 ```javascript
-<script type="text/javascript" src="js/epg.js"></script>
+<script type="text/javascript" src="epg.min.js"></script>
 ```
-Now you can use `epg`, first, initialize it:
+
+现在您就可以使用 `epg`了，首先进行初始化:
 ```javascript
 epg.init({
-	// config code.
+	// 配置项
 });
 ```
-Next, set a place where the style tag needs focus, and the location of the default link style tag is the focus. <br>
-What? Set the tag for focus? Are you kidding me? A lot of people will ask why? The set-top box browser already has a focus style, why not use it? Seriously, I'm not crazy, it's telecom mad. Each type of set-top box focus style is inconsistent, and you can't change the way it looks. There is no document telling us how to change the appearance of it, the `CTC` can not give the document, or the internal reference does not pass. <br>
-So we can only solve this problem by ourselves, and this is the answer.
 
->Remember it, if telecom's boss is not your friend, please don't try to use `a` tag as focus.
+接下来，通过设置一个class标记需要焦点的位置（机顶盒默认焦点是`<a>`标签）。 <br>
 
-Then the question comes again, without `a` tag, how to configure the link, how to achieve the jump? You can use a custom attribute to put a link into the focus tag, such as `data-*`, when needed. With links, things get easier, `document.location.herf` can instead `a` tag.<br>
-If you want to use some special effects, the plug-in provides a tool called `swiper`, which has two modes of expression: slide effects and list movement effects.
+开什么国际玩笑？机顶盒已经有焦点样式了，为什么不适用它？这就像HTML标签，我们通常都会reset。机顶盒的焦点也是一样，每个厂商对焦点框的样式和外框计算规则是不一致的，同时电信没有对此有规范，即使有可能也是内部资料（不外传）。HTML的外框无非border、outline、box-shadow，它们在有些机顶盒上是生效的。开发者应该都遇到过，有些机顶盒的焦点框可以沿着文字外框曲折变化，这显然不是HTML的样式所能做到。 <br>
+
+所以要做到焦点统一，我们只能自己想办法，这就是为什么Epg出现。
+
+> 记住，如果电信公司的老板不是您的朋友，请不要试图用`<a>`标签作为焦点。
+
+那么问题又来了，没有`<a>`标签，如何配置链接，如何实现跳转? 当需要时，您可以使用自定义属性将链接放在标识为焦点的标签上，例如`data-*`。 有了链接，事情变得更容易，`document.location.herf`来完成跳转工作。<br>
+
+如果想使用一些特殊效果，Epg提供了`swiper`进行支持，它有两种效果：幻灯片效果和列表移动效果。
 ```javascript
 new epg.swiper({
-	// config code.
+	// 配置项
 });
 ```
-The configuration item reference API file [API.md](https://github.com/IanLew/epg/blob/master/API.md).
 
->It is worth remembering that it must be used after the document is loaded. You can use it in function `window.onload`, or you can write it in the end. If you use synchronous loading, the initialization should be in the synchronous completion function.
+> 须要记住的是，它必须在加载文件之后使用。您可以在`window.onload`使用，也可以在HTML最后写。 如果使用同步加载，初始化应该在同步完成函数中。  
 
-You can see examples in the [demo/](https://github.com/IanLew/epg/tree/master/demo) directory, the pages under the [sample/](https://github.com/IanLew/epg/tree/master/demo/sample) directory are a few simple answers, the pages under the [project/](https://github.com/IanLew/epg/tree/master/demo/project) directory are used under the project.
+[Epg参考文档](https://github.com/IanLew/epg/blob/master/API.md)。
 
-## Build
-This is the result of the project I have been working on for several months, and I hope it will be useful to you. Due to personal open source, not the nature of the company, the code is a reversion of personal arrangement after work. If you think my code is bad, or if you want to add your own code, you can rewrite the code.<br>
-First, you need to `clone` my source code, it looks like crap, but I like crap.<br>
-Then install the dependency package, in repo's root:
+[相关demo](https://github.com/IanLew/epg/tree/master/demo)，[sample](https://github.com/IanLew/epg/tree/master/demo/sample)是对`swiper`的使用，[project](https://github.com/IanLew/epg/tree/master/demo/project)是Epg在项目中的使用。
+
+## 修改源码
+这仅仅只是我以前项目的一个结果，希望它可以帮到您。个人拥有绝对版权，不是公司性质。如果您认为我的代码不好，或者您想添加自己的代码，您可以不负责地修改。<br>
+
+首先，您需要克隆我的源代码，虽然它看起来像垃圾，但我喜欢它，因为它曾给我解决过麻烦。<br>
+
+然后在Epg的目录下运行安装依赖包：
+```bash
+npm install
 ```
-$ npm install
-```
-And build development environment:
-```
-$ grunt
+
+编译生产代码，文件将出现在`build`中：
+```bash
+grunt
 ```	
-Production version will available in `build/` directory.

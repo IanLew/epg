@@ -3,3 +3,6 @@
 
 # Security
 package-lock.json
+
+# Directory
+.git

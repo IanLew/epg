@@ -1,20 +1,21 @@
 # Epg API
-Because javascript is an open language, many of the methods in the program can be accessed. And I didn't privatize them, so, if you know what they do and can use them, congratulations. However, I am not prepared to introduce it here. I will only elaborate on what I think is important. Now, let's go.<br>
-When you use `epg`, first identify the focus tag on the page and then initialize the `epg`.
+因为JavaScript没有强力支持私有化的能力，因此程序中的内部方法也可能被访问到，所以，如果您知道它们做什么用，恭喜您可以随便。然而，我不准备在这里介绍它，除了一些关键。<br>
+
+当你开始使用`epg`，首先确定焦点标识class，然后初始化`epg`.
 ```javascript
 epg.init({
 	// config code.
 });
 ```
 
-## Initialize configuration
-The following is the default value for the configuration item.
+## 初始化
+配置项的默认值如下所示：
 ```javascript
 var defaults = {
 	controller: {},
 	cursor: {
 		sign: '.link',
-		first: doc.querySelector('.link'),
+		first: document.querySelector('.link'),
 		rim: '.pseudo',
 		mode: 'outer',
 		border: '#ffde00 solid 2px',
@@ -23,49 +24,54 @@ var defaults = {
 	}
 };
 ```
-Configuration item interpretation:<br>
-`controller`: remote control object, you can write the operation callback function inside.<br>
-These are the callback functions: `left`, `right`, `up`, `down`, `enter` and `back`. `left`/`right`/`up`/`down` are the focus movement direction function. If you don't need any action while the focus is moving, you can't configure it. Instead, the built-in operation function, which is the internal operation function of the `cursor` object. Even if there is any change that must be reset, you will lose the default operation and you will be solely responsible for all operations. For example, the data is loaded synchronous or the focus jumps to the specified location. That is, if the initialization is done externally, the callback must be used for the corresponding purpose. <br>
-`enter` and `back` are link jump and page return function. If there is no operation, you can do without configuration.<br>
-`cursor`: focus object's configuration object, relationship to focus execution.<br>
-`sign`, a class name which is the tag of the focus, if you do not set the focus mark must be the default.<br>
-`first`, the first focus which you want to set, if not specified, the default value will be executed. Because the first focus needs to be found, it must be initialized in the presence of the focus, otherwise it may not be expected.<br>
-`rim`, a focus class name, the box style, the external style.<br>
-`mode`, `outer` is default, it means external style, if the value is it, `rim` class must be define. Another value `inline`, it means inline style, if the value is it, config value `border` and `shadow` are valid.<br>
-`border` and `shadow`, border style and shades style.<br>
-`effect`, data type is number, has two effects which `scale` and `twinkle`. If the value is between 1 and 5, the focus area will perform magnification. If the value is between 500 and 2000, the focus area will perform the flicker effect. 
 
-## Cousor Object
-As mentioned above, it is a focus object and can be moved to the next appropriate focus position according to the direction of operation. The functions `left`/`right`/`up`/`down`, automatically moves to the next appropriate focus, depending on the initial focus, if there is no substitute function initialized. If the new function is initialized, it can still be invoked internally for situations where there is no new focus.<br>
-So call:
-```javascript
-epg.cursor.left();  // normal call.
-epg.cursor.right(document.querySelector('.video .link'));  // new focus.
-```
-The second invocation, the argument must be the `only DOM object`.<br>
-Other major functions:
-```javascript
-epg.cursor.parent(first, second);  // return the target parent element exists.
-```
-`first` is the parent element, must. `second` is find the child element of the parent element, optional. If `second` is not exists, the default value is the current focus. These two parameters are allowed to be `string` or `only DOM object`.
-```javascript
-epg.cursor.index(parent, target);  // return the target element is indexed by the parent element.
-```
-`parent` is the parent element, must. `target` is child element under the parent element, optional. If `target` is not exists, the default value is the current focus. These two parameters are allowed to be `string` or `only DOM object`.
-```javascript
-epg.cursor.next(dir);  // return next focus.
-```
-`dir`, specifies the direction of the next focus.<br>
-Functions that can still be called externally:
-```javascript
-// Internal call:
-epg.cursor.move(parameter);  // The focus moves(left/right/up/down) the underlying call function.
-epg.cursor.setRim();  // The focus box sets the function.
-```
-You can get current cusor by `epg.cursor.pointer`.
+配置项说明：<br>
+`controller`：远程控制对象，可以在里面写操作回调函数。操作回调函数有`left`，`right`，`up`，`down`，`enter`和`back`。配置项如下：<br>
+`left`/`right`/`up`/`down`：焦点移动操作回调。如果在焦点移动时不需要任何特殊操作，则无需配置它。如果他们没有被自定义，则由内部操作函数负责计算焦点。一旦配置您将失去默认操作，您将全权负责所有焦点移动。这个配置有用的，例如，焦点跳转到指定的位置。Epg提供了获取下一个焦点api，用于执行默认的移动规则<br>
+`enter`/`back`：链接跳转/页面返回回调。如果没有操作，可以不配置。<br>
 
-## Swiper Object
-A special effects utility class, include `slide` and `list movement` two kinds of special effects, The following is the default value for the configuration item.
+`cursor`: 焦点的相关配置，配置项如下：<br>
+`sign`：如果没有设置焦点标记，则作为焦点标记的类名必须为默认值.link。<br>
+`first`：您想要设置的第一个焦点，如果没有指定，将执行默认值。因为需要找到第一个焦点，所以必须在有焦点的情况下初始化它，否则可能无法达到预期。<br>
+`rim`：焦点类名、框样式、外部样式。<br>
+`mode`：`outer`是默认值，它意味着外部样式，须配置`rim`。另一个值`inline`表示内联样式，须配置`border`和`shadow`。<br>
+`border`/`shadow`：边框风格和阴影风格。<br>
+`effect`：数据类型是number，有两种效果，`scale`和`twinkle`。如果该值在1到5之间，则对聚焦区域进行放大。当该值在500~2000之间时，焦点区域会产生闪烁效果。
+
+## Cousor对象
+Cousor对象，默认根据操作方向移动到下一个合适的聚焦位置。如果没有初始化的回调函数，`Cousor.left`/`Cousor.right`/`Cousor.up`/`Cousor.down`会根据初始化的焦点自动移动到下一个适当的焦点。如果已经初始化回调函数，那么在没有新焦点的情况下仍然可以在内部调用它，调用方法如下：<br>
+```javascript
+epg.cursor.left();  // 正常调用
+epg.cursor.right(document.querySelector('.video .link'));  // 传入焦点DOM
+```
+第二个调用方法，参数必须是`唯一的DOM对象`。<br>
+
+其他主要功能:
+```javascript
+epg.cursor.parent(first, second);  // 返回存在的目标父元素。
+```
+`first`是父元素，必须。`second`是查找父元素的子元素，可选。如果`second`不存在，则默认值为当前焦点。这两个参数可以是`string`或`唯一DOM对象`。
+
+```javascript
+epg.cursor.index(parent, target);  // 返回由父元素索引的目标元素。
+```
+`parent`是父元素，必须。`target`是父元素下的子元素，可选。如果`target`不存在，则默认值为当前焦点。这两个参数可以是`string`或`唯一DOM对象`。
+
+```javascript
+epg.cursor.next(dir);  // 返回下一个焦点。
+```
+`dir`指定下一个焦点的方向。<br>
+
+仍然可以从外部调用的函数:  
+```javascript
+// 内部方法
+epg.cursor.move(parameter);  // 焦点移动(left/right/up/down)底层调用函数。
+epg.cursor.setRim();  // 焦点框设置功能。
+```
+你可以通过`epg.cursor.pointer`获取当前焦点。
+
+## Swiper对象
+Swiper对象，包括`幻灯片`和`列表移动`两种特效，下面是配置项的默认值：
 ```javascript
 var defaults = {
 	mode: 'none',
@@ -84,12 +90,15 @@ var defaults = {
 	distance: 0
 };
 ```
-Configuration item interpretation:<br>
-`mode`, effecttype, `list` or `slide`. If not configured, the program automatically identifies the type. Of course, there will be an identification failure, and the default will not be any operation. For example, the width/height you set is not the same as the program expected. So I strongly recommend configuring it.<br>
-`container`, outermost layer, class name. `wrapper`, list package, class name. `pagination`, paging indicator, only type is valid for `slide`., so `list` don't need to configure. `wrapper`, the pager wrap layer, class name. `tagName`, the tag used by the paging indicator. `normal`, normal pager, class name. `active`, current page indicator, class name. `prevButton` and `nextButton`, the previous and next page indicator buttons, class name. These configuration items must be used in accordance with the corresponding parameters if they are not configured.<br>
-`direction`, list/slide orientation, `horizontal` or `vertical`.<br>
-`autoPlay`, autoplay delay, If the value is 0, it doesn't play automatically. Just like `pagination`, it only works for the `slide` type.<br>
-`distance`, specify a width/height as the moving distance, it only works for the `list` type.<br>
+
+配置项说明：<br>
+`mode`：效果类型，`list`/`slide`。如果没有配置，程序将自动识别类型。 当然，会出现标识失败，并且默认不会有任何操作。 例如，您设置的宽度/高度与程序期望的不一样。 所以我强烈建议配置它。  <br>
+`container`：最外层，类名。`wrapper`，列表包裹层，类名。<br>
+`pagination`：分页配置，只对`slide`类型有效，因此`list`类型不需要配置。`wrapper`，分页包装层，类名。`tagName`，分页指示器所使用的标记。`normal`，非激活状态，类名。`active`，激活状态，类名。`prevButton`/`nextButton`，上一页和下一页指示按钮，类名。 如果没有配置这些配置项，则需要根据对应的参数进行页面配置。<br>
+`direction`：列表/滑动方向，`horizontal` or `vertical`.<br>
+`autoPlay`：自动播放延迟，如果该值为0，则不会自动播放。和`pagination`一样，只对`slide`类型有效。<br>
+`distance`：指定移动距离，只对`list`类型有效。<br>
+
 ```html
 <!-- swiper-list -->
 <div class="swiper-container">
@@ -114,15 +123,17 @@ Configuration item interpretation:<br>
 	<div class="swiper-pagination"></div>
 </div>
 ```
-You can control `swiper` movement direction, the functions `left`/`right`/`up`/`down`, So call:
+
+你可以控制`swiper`移动方向：`Swiper.left`/`Swiper.right`/`Swiper.up`/`Swiper.down`：
 ```javascript
 epg.swiper.left(); 
 epg.swiper.up();
 ```
-Functions that can still be called externally:
+
+仍然可以从外部调用的函数:  
 ```javascript
-// Internal call: 
-epg.swiper.move(dir, auto);  // The focus moves(left/right/up/down) the underlying call function.
-epg.swiper.contrls();  // setting the previous and next page indicator buttons.
-epg.swiper.autoPlay();  // slide autoplay.
+// 内部方法 
+epg.swiper.move(dir, auto);  // 焦点移动(left/right/up/down)底层调用函数。
+epg.swiper.contrls();  // 设置上一页和下一页的指标按钮。
+epg.swiper.autoPlay();  // 自动播放
 ```
